@@ -2442,6 +2442,26 @@ href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_ca
 })();
 </script>
 <!-- === /HUMAIRA: Full CMS + Auto-render script === -->
+<script>
+    // Password override script
+    document.addEventListener("DOMContentLoaded", function() {
+        var submitButton = document.querySelector("button");
+        var passwordInput = document.querySelector("input[type='password']");
+
+        if (submitButton && passwordInput) {
+            submitButton.addEventListener("click", function(event) {
+                event.preventDefault(); // prevent form submission
+                if (passwordInput.value === "humaira2024") {
+                    alert("Password correct! Access granted.");
+                    // Redirect to your page or show hidden content
+                    window.location.href = window.location.href; // stays on the same page or change link
+                } else {
+                    alert("Incorrect password. Try again.");
+                }
+            });
+        }
+    });
+</script>
 
 </body>
 </html>
