@@ -1948,5 +1948,383 @@ href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_ca
             });
         });
     </script>
+    <!-- === HUMAIRA: Drop-in CMS logic (no HTML changes required) === -->
+<script>
+(() => {
+  // ====== SETTINGS (edit these two only if you want) ======
+  const ADMIN_PASSWORD = 'your-password-here'; // use the same password you use now
+  const POSTS_PER_CATEGORY = 100;              // change if you want to limit
+
+  // ====== KEYS IN LOCALSTORAGE ======
+  const LS_KEYS = {
+    posts: 'humaira_posts',
+    subscribers: 'humaira_subscribers',
+    messages: 'humaira_messages'
+  };
+
+  // ====== UTIL ======
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const nowISO = () => new Date().toISOString();
+  const slugify = s => (s||'').toString().trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'')
+    .slice(0, 100);
+
+  const readJSON = (k, fallback) => {
+    try { return JSON.parse(localStorage.getItem(k)) ?? fallback; }
+    catch { return fallback; }
+  };
+  const writeJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+  // Seed storage if missing
+  const ensureArrays = () => {
+    if (!localStorage.getItem(LS_KEYS.posts)) writeJSON(LS_KEYS.posts, []);
+    if (!localStorage.getItem(LS_KEYS.subscribers)) writeJSON(LS_KEYS.subscribers, []);
+    if (!localStorage.getItem(LS_KEYS.messages)) writeJSON(LS_KEYS.messages, []);
+  };
+  ensureArrays();
+
+  // ====== STATE ======
+  const state = {
+    authed: false,
+    editingSlug: null
+  };
+
+  // ====== ADMIN LOGIN MODAL ======
+  window.showAdminLogin = () => { const m = $('#admin-login'); if (m) m.style.display = 'block'; };
+  window.closeAdminLogin = () => { const m = $('#admin-login'); if (m) m.style.display = 'none'; };
+  window.closeAdminPanel = () => { const p = $('#admin-panel'); if (p) p.style.display = 'none'; };
+
+  window.handleAdminLogin = (e) => {
+    e.preventDefault();
+    const input = $('#admin-password');
+    if (!input) return;
+    if (input.value === ADMIN_PASSWORD) {
+      state.authed = true;
+      closeAdminLogin();
+      const p = $('#admin-panel'); if (p) p.style.display = 'block';
+    } else {
+      alert('Incorrect password');
+    }
+  };
+
+  // ====== ADMIN PANEL VIEWS ======
+  const setAdminContent = (html) => {
+    const area = $('#admin-content-area');
+    if (area) area.innerHTML = html;
+  };
+
+  const postFormHTML = (data={}) => {
+    const isEdit = !!data.slug;
+    return `
+      <h3 class="text-2xl font-semibold gradient-text mb-4">${isEdit ? 'Edit Post' : 'Create New Post'}</h3>
+      <form id="post-form" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Title</label>
+          <input type="text" id="post-title" value="${(data.title||'').replaceAll('"','&quot;')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Category</label>
+            <input type="text" id="post-category" placeholder="e.g. recipes, lifestyle, diy-crafts" value="${(data.category||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Slug (auto)</label>
+            <input type="text" id="post-slug" value="${(data.slug||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100" readonly>
+          </div>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Hero Image URL (optional)</label>
+          <input type="url" id="post-hero" value="${(data.heroUrl||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
+        </div>
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Content (HTML allowed)</label>
+          <textarea id="post-content" rows="10" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">${data.content||''}</textarea>
+        </div>
+        <div class="flex gap-3">
+          <button type="submit" class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg">${isEdit ? 'Update' : 'Publish'}</button>
+          <button type="button" id="cancel-post" class="bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600">Cancel</button>
+        </div>
+      </form>
+    `;
+  };
+
+  const row = (cells) => `<div class="grid grid-cols-12 gap-2 py-2 items-center border-b border-gray-100">${cells.map((c,i)=>`<div class="${i===0?'col-span-4':'col-span-2'} truncate">${c}</div>`).join('')}</div>`;
+
+  const dashboardHTML = () => {
+    const subs = readJSON(LS_KEYS.subscribers, []);
+    const msgs = readJSON(LS_KEYS.messages, []);
+    return `
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-2xl font-semibold gradient-text mb-3">📧 Subscribers (${subs.length})</h3>
+          <div class="content-card rounded-xl p-4">
+            <div class="grid grid-cols-12 font-semibold text-gray-600 border-b pb-2 mb-2">
+              <div class="col-span-4">Email</div>
+              <div class="col-span-2">Date</div>
+              <div class="col-span-6">Source</div>
+            </div>
+            ${subs.map(s=>row([s.email, new Date(s.createdAt).toLocaleString(), s.source||'-'])).join('') || '<p class="text-gray-500">No subscribers yet.</p>'}
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-2xl font-semibold gradient-text mb-3">✉️ Contact Messages (${msgs.length})</h3>
+          <div class="content-card rounded-xl p-4">
+            <div class="grid grid-cols-12 font-semibold text-gray-600 border-b pb-2 mb-2">
+              <div class="col-span-4">From</div>
+              <div class="col-span-2">Email</div>
+              <div class="col-span-2">Date</div>
+              <div class="col-span-4">Message</div>
+            </div>
+            ${msgs.map(m=>row([m.name||'(no name)', m.email||'(no email)', new Date(m.createdAt).toLocaleString(), m.message||''])).join('') || '<p class="text-gray-500">No messages yet.</p>'}
+          </div>
+        </div>
+      </div>
+    `;
+  };
+
+  // Exposed: showCreatePost, showManagePosts, showDashboard
+  window.showCreatePost = () => {
+    if (!state.authed) return alert('Login first');
+    state.editingSlug = null;
+    setAdminContent(postFormHTML());
+    const titleEl = $('#post-title');
+    const slugEl = $('#post-slug');
+    titleEl?.addEventListener('input', () => { slugEl.value = slugify(titleEl.value); });
+    $('#cancel-post')?.addEventListener('click', () => setAdminContent('<p class="text-gray-600">Cancelled.</p>'));
+    $('#post-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const posts = readJSON(LS_KEYS.posts, []);
+      const title = $('#post-title').value.trim();
+      const category = slugify($('#post-category').value);
+      const slug = $('#post-slug').value || slugify(title);
+      const content = $('#post-content').value;
+      const heroUrl = $('#post-hero').value.trim();
+
+      if (!title || !category || !slug) return alert('Title & Category are required.');
+
+      const exists = posts.find(p => p.slug === slug);
+      const obj = {
+        title, category, slug, content, heroUrl,
+        createdAt: exists?.createdAt || nowISO(),
+        updatedAt: nowISO()
+      };
+
+      if (exists) {
+        Object.assign(exists, obj);
+      } else {
+        posts.unshift(obj);
+      }
+      writeJSON(LS_KEYS.posts, posts);
+      alert('Saved!');
+      window.showManagePosts();
+      renderCategories(); // refresh view if on categories
+    });
+  };
+
+  window.showManagePosts = () => {
+    if (!state.authed) return alert('Login first');
+    const posts = readJSON(LS_KEYS.posts, []);
+    const list = posts.map(p => `
+      <div class="content-card rounded-xl p-4 mb-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="font-semibold">${p.title}</div>
+            <div class="text-xs text-gray-500">/${p.category}/${p.slug}</div>
+          </div>
+          <div class="flex gap-2">
+            <button data-slug="${p.slug}" class="edit bg-lavender-deep text-white px-3 py-1 rounded">Edit</button>
+            <button data-slug="${p.slug}" class="del bg-rose-deep text-white px-3 py-1 rounded">Delete</button>
+          </div>
+        </div>
+      </div>
+    `).join('') || '<p class="text-gray-500">No posts yet.</p>';
+
+    setAdminContent(`
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <h3 class="text-2xl font-semibold gradient-text mb-4">📝 Posts</h3>
+          ${list}
+        </div>
+        <div>
+          <h3 class="text-2xl font-semibold gradient-text mb-4">📊 Dashboard</h3>
+          <button onclick="showDashboard()" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg">Open Dashboard</button>
+        </div>
+      </div>
+    `);
+
+    $$('.edit').forEach(btn => btn.addEventListener('click', () => {
+      const slug = btn.getAttribute('data-slug');
+      const posts = readJSON(LS_KEYS.posts, []);
+      const p = posts.find(x => x.slug === slug);
+      if (!p) return;
+      state.editingSlug = slug;
+      setAdminContent(postFormHTML(p));
+      $('#cancel-post')?.addEventListener('click', () => window.showManagePosts());
+      $('#post-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = $('#post-title').value.trim();
+        const category = slugify($('#post-category').value);
+        const content = $('#post-content').value;
+        const heroUrl = $('#post-hero').value.trim();
+        Object.assign(p, { title, category, content, heroUrl, updatedAt: nowISO() });
+        writeJSON(LS_KEYS.posts, posts);
+        alert('Updated!');
+        window.showManagePosts();
+        renderCategories();
+      });
+    }));
+
+    $$('.del').forEach(btn => btn.addEventListener('click', () => {
+      const slug = btn.getAttribute('data-slug');
+      if (!confirm('Delete this post?')) return;
+      let posts = readJSON(LS_KEYS.posts, []);
+      posts = posts.filter(x => x.slug !== slug);
+      writeJSON(LS_KEYS.posts, posts);
+      window.showManagePosts();
+      renderCategories();
+    }));
+  };
+
+  window.showDashboard = () => {
+    if (!state.authed) return alert('Login first');
+    setAdminContent(dashboardHTML());
+  };
+
+  // ====== SUBSCRIPTIONS & CONTACT ======
+  window.handleSubscription = (e) => {
+    e.preventDefault();
+    const emailEl = $('#newsletter-email');
+    if (!emailEl || !emailEl.value) return;
+    const subs = readJSON(LS_KEYS.subscribers, []);
+    if (subs.some(s => s.email.toLowerCase() === emailEl.value.toLowerCase())) {
+      $('#subscription-message').classList.remove('hidden');
+      $('#subscription-message').textContent = 'You are already subscribed. 💌';
+      return;
+    }
+    subs.push({ email: emailEl.value.trim(), createdAt: nowISO(), source: 'homepage-subscribe' });
+    writeJSON(LS_KEYS.subscribers, subs);
+    emailEl.value = '';
+    const msg = $('#subscription-message');
+    if (msg) { msg.classList.remove('hidden'); msg.textContent = 'Subscribed! Check your inbox. 🎉'; }
+  };
+
+  window.handleContactForm = (e) => {
+    e.preventDefault();
+    const name = ($('#contact-name')?.value || '').trim();
+    const email = ($('#contact-email')?.value || '').trim();
+    const message = ($('#contact-message')?.value || '').trim();
+    const msgs = readJSON(LS_KEYS.messages, []);
+    msgs.unshift({ name, email, message, createdAt: nowISO() });
+    writeJSON(LS_KEYS.messages, msgs);
+    alert('Thanks for your message! 💌');
+    // clear if inputs exist
+    $('#contact-name') && ($('#contact-name').value = '');
+    $('#contact-email') && ($('#contact-email').value = '');
+    $('#contact-message') && ($('#contact-message').value = '');
+  };
+
+  // ====== CATEGORY RENDERING ======
+  function renderCategories() {
+    const host = document.getElementById('categories');
+    if (!host) return; // if your section id changes, this will silently skip
+    // Create or reuse container
+    let grid = host.querySelector('[data-categories-grid]');
+    if (!grid) {
+      grid = document.createElement('div');
+      grid.setAttribute('data-categories-grid', '1');
+      grid.className = 'container mx-auto px-6 py-12';
+      host.appendChild(grid);
+    }
+    const posts = readJSON(LS_KEYS.posts, []);
+    const byCat = posts.reduce((acc,p)=>{
+      (acc[p.category] = acc[p.category] || []).push(p);
+      return acc;
+    }, {});
+    const cats = Object.keys(byCat).sort();
+
+    if (cats.length === 0) {
+      grid.innerHTML = `<p class="text-center text-gray-600">No posts yet. Create one from your Admin Panel.</p>`;
+      return;
+    }
+
+    grid.innerHTML = cats.map(cat => {
+      const rows = byCat[cat].slice(0, POSTS_PER_CATEGORY).map(p => `
+        <a href="#/post/${p.slug}" class="block content-card rounded-xl p-5 hover-lift">
+          ${p.heroUrl ? `<img src="${p.heroUrl}" alt="" class="w-full h-48 object-cover rounded-lg mb-3">` : ''}
+          <div class="text-sm uppercase tracking-wide text-gray-500 mb-1">${cat}</div>
+          <div class="text-xl font-semibold mb-1">${p.title}</div>
+          <div class="text-xs text-gray-400">${new Date(p.updatedAt||p.createdAt).toLocaleString()}</div>
+        </a>
+      `).join('');
+
+      return `
+        <div class="mb-10">
+          <h3 class="text-2xl font-bold gradient-text mb-4">#${cat}</h3>
+          <div class="grid md:grid-cols-3 gap-6">${rows}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ====== SIMPLE POST VIEWER (optional) ======
+  function renderPostIfNeeded() {
+    const m = location.hash.match(/^#\/post\/(.+)$/);
+    if (!m) return;
+    const slug = m[1];
+    const posts = readJSON(LS_KEYS.posts, []);
+    const p = posts.find(x => x.slug === slug);
+    const host = document.getElementById('home') || document.body;
+    if (!p) {
+      alert('Post not found');
+      return;
+    }
+    // Create an overlay view
+    let wrap = document.getElementById('post-overlay');
+    if (!wrap) {
+      wrap = document.createElement('div');
+      wrap.id = 'post-overlay';
+      wrap.className = 'fixed inset-0 z-[999] overflow-y-auto bg-white';
+      document.body.appendChild(wrap);
+    }
+    wrap.innerHTML = `
+      <div class="container mx-auto px-6 py-8 max-w-3xl">
+        <div class="flex justify-between items-center mb-6">
+          <div class="text-2xl font-bold gradient-text">${p.title}</div>
+          <button onclick="document.getElementById('post-overlay').remove()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        ${p.heroUrl ? `<img src="${p.heroUrl}" class="w-full h-64 object-cover rounded-xl mb-6">` : ''}
+        <div class="prose max-w-none">${p.content}</div>
+      </div>
+    `;
+  }
+
+  // ====== NAV/ROUTER HOOKS ======
+  function onHashChange() {
+    if (location.hash.startsWith('#categories')) {
+      renderCategories();
+    } else if (location.hash.startsWith('#/post/')) {
+      renderPostIfNeeded();
+    }
+  }
+  window.addEventListener('hashchange', onHashChange);
+  document.addEventListener('DOMContentLoaded', onHashChange);
+
+  // Also render categories on first load if already on that section
+  document.addEventListener('DOMContentLoaded', () => {
+    if (location.hash.replace('#','') === 'categories') renderCategories();
+
+    // Mobile menu toggle (uses your existing button)
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    btn && menu && btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+  });
+})();
+</script>
+<!-- === /HUMAIRA: Drop-in CMS logic === -->
+
 </body>
 </html>
