@@ -2325,6 +2325,123 @@ href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_ca
 })();
 </script>
 <!-- === /HUMAIRA: Drop-in CMS logic === -->
+<!-- === HUMAIRA: Full CMS + Auto-render script === -->
+<script>
+(() => {
+  const ADMIN_PASSWORD = 'your-password-here';
+  const POSTS_PER_CATEGORY = 100;
+  const LS_KEYS = { posts:'humaira_posts', subscribers:'humaira_subscribers', messages:'humaira_messages' };
+  const $ = (s,r=document)=>r.querySelector(s);
+  const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+  const nowISO=()=>new Date().toISOString();
+  const slugify=s=>(s||'').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,100);
+  const readJSON=k,f=>(JSON.parse(localStorage.getItem(k))||f);
+  const writeJSON=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+  if(!localStorage.getItem(LS_KEYS.posts)) writeJSON(LS_KEYS.posts,[]);
+  if(!localStorage.getItem(LS_KEYS.subscribers)) writeJSON(LS_KEYS.subscribers,[]);
+  if(!localStorage.getItem(LS_KEYS.messages)) writeJSON(LS_KEYS.messages,[]);
+
+  const state={authed:false,editingSlug:null};
+
+  window.showAdminLogin=()=>{$('#admin-login')?.style.display='block';};
+  window.closeAdminLogin=()=>{$('#admin-login')?.style.display='none';};
+  window.closeAdminPanel=()=>{$('#admin-panel')?.style.display='none';};
+  window.handleAdminLogin=(e)=>{e.preventDefault();if($('#admin-password')?.value===ADMIN_PASSWORD){state.authed=true;closeAdminLogin();$('#admin-panel').style.display='block';}else alert('Incorrect password');};
+
+  const setAdminContent=html=>{$('#admin-content-area').innerHTML=html;};
+
+  const postFormHTML=(d={})=>{const isEdit=!!d.slug;return`
+    <h3 class="text-2xl font-semibold gradient-text mb-4">${isEdit?'Edit Post':'Create New Post'}</h3>
+    <form id="post-form" class="space-y-4">
+      <div><label>Title</label><input type="text" id="post-title" value="${(d.title||'').replaceAll('"','&quot;')}" class="w-full border p-2"></div>
+      <div><label>Category</label><input type="text" id="post-category" value="${(d.category||'')}" class="w-full border p-2"></div>
+      <div><label>Slug</label><input type="text" id="post-slug" value="${(d.slug||'')}" readonly class="w-full border p-2 bg-gray-100"></div>
+      <div><label>Hero Image URL</label><input type="url" id="post-hero" value="${(d.heroUrl||'')}" class="w-full border p-2"></div>
+      <div><label>Content (HTML allowed)</label><textarea id="post-content" rows="8" class="w-full border p-2">${d.content||''}</textarea></div>
+      <div><button type="submit" class="bg-purple-500 text-white px-4 py-2">${isEdit?'Update':'Publish'}</button>
+      <button type="button" id="cancel-post">Cancel</button></div>
+    </form>
+  `};
+
+  window.showCreatePost=()=>{
+    if(!state.authed) return alert('Login first');
+    state.editingSlug=null; setAdminContent(postFormHTML());
+    const titleEl=$('#post-title'), slugEl=$('#post-slug');
+    titleEl?.addEventListener('input',()=>{slugEl.value=slugify(titleEl.value)});
+    $('#cancel-post')?.addEventListener('click',()=>setAdminContent('<p>Cancelled</p>'));
+    $('#post-form')?.addEventListener('submit',e=>{
+      e.preventDefault();
+      const posts=readJSON(LS_KEYS.posts,[]);
+      const title=$('#post-title').value.trim(), category=slugify($('#post-category').value), slug=$('#post-slug').value||slugify(title), content=$('#post-content').value, heroUrl=$('#post-hero').value.trim();
+      if(!title||!category||!slug) return alert('Title & Category required');
+      const exists=posts.find(p=>p.slug===slug);
+      const obj={title,category,slug,content,heroUrl,createdAt:exists?.createdAt||nowISO(),updatedAt:nowISO()};
+      if(exists) Object.assign(exists,obj); else posts.unshift(obj);
+      writeJSON(LS_KEYS.posts,posts);
+      alert('Saved!');
+      window.showManagePosts();
+      renderCategories(); renderLatestPosts('latest-posts',3);
+    });
+  };
+
+  window.showManagePosts=()=>{
+    if(!state.authed) return alert('Login first');
+    const posts=readJSON(LS_KEYS.posts,[]);
+    setAdminContent(posts.map(p=>`<div><strong>${p.title}</strong> (${p.category}) <button data-slug="${p.slug}" class="edit">Edit</button> <button data-slug="${p.slug}" class="del">Delete</button></div>`).join('')||'<p>No posts yet.</p>');
+    $$('.edit').forEach(btn=>btn.addEventListener('click',()=>{
+      const p=readJSON(LS_KEYS.posts,[]).find(x=>x.slug===btn.getAttribute('data-slug'));
+      if(!p) return; state.editingSlug=p.slug; setAdminContent(postFormHTML(p));
+      $('#cancel-post')?.addEventListener('click',()=>window.showManagePosts());
+      $('#post-form')?.addEventListener('submit',e=>{
+        e.preventDefault(); Object.assign(p,{title:$('#post-title').value.trim(),category:slugify($('#post-category').value),content:$('#post-content').value,heroUrl:$('#post-hero').value.trim(),updatedAt:nowISO()});
+        writeJSON(LS_KEYS.posts,readJSON(LS_KEYS.posts,[])); alert('Updated!'); window.showManagePosts(); renderCategories(); renderLatestPosts('latest-posts',3);
+      });
+    }));
+    $$('.del').forEach(btn=>btn.addEventListener('click',()=>{
+      if(!confirm('Delete this post?')) return;
+      let posts=readJSON(LS_KEYS.posts,[]); posts=posts.filter(x=>x.slug!==btn.getAttribute('data-slug')); writeJSON(LS_KEYS.posts,posts);
+      window.showManagePosts(); renderCategories(); renderLatestPosts('latest-posts',3);
+    }));
+  };
+
+  window.showDashboard=()=>{if(!state.authed)return alert('Login first'); const subs=readJSON(LS_KEYS.subscribers,[]), msgs=readJSON(LS_KEYS.messages,[]); setAdminContent(`
+    <h3>Subscribers (${subs.length})</h3>${subs.map(s=>`<div>${s.email} - ${new Date(s.createdAt).toLocaleString()}</div>`).join('')}
+    <h3>Messages (${msgs.length})</h3>${msgs.map(m=>`<div>${m.name} (${m.email}): ${m.message}</div>`).join('')}
+  `)};
+
+  window.handleSubscription=e=>{e.preventDefault(); const email=$('#newsletter-email')?.value; if(!email) return; const subs=readJSON(LS_KEYS.subscribers,[]); if(subs.some(s=>s.email.toLowerCase()===email.toLowerCase())) return alert('Already subscribed'); subs.push({email,createdAt:nowISO()}); writeJSON(LS_KEYS.subscribers,subs); alert('Subscribed!'); $('#newsletter-email')&&( $('#newsletter-email').value='');};
+
+  window.handleContactForm=e=>{e.preventDefault(); const name=$('#contact-name')?.value||'', email=$('#contact-email')?.value||'', msg=$('#contact-message')?.value||''; const msgs=readJSON(LS_KEYS.messages,[]); msgs.unshift({name,email,message:msg,createdAt:nowISO()}); writeJSON(LS_KEYS.messages,msgs); alert('Thanks for your message!'); $('#contact-name')&&($('#contact-name').value=''); $('#contact-email')&&($('#contact-email').value=''); $('#contact-message')&&($('#contact-message').value='');};
+
+  function renderCategories(){
+    const host=document.getElementById('categories'); if(!host) return;
+    let grid=host.querySelector('[data-categories-grid]'); if(!grid){ grid=document.createElement('div'); grid.setAttribute('data-categories-grid','1'); host.appendChild(grid);}
+    const posts=readJSON(LS_KEYS.posts,[]); const byCat={}; posts.forEach(p=>(byCat[p.category]=byCat[p.category]||[]).push(p));
+    const cats=Object.keys(byCat).sort();
+    if(cats.length===0){grid.innerHTML='<p>No posts yet.</p>'; return;}
+    grid.innerHTML=cats.map(cat=>`<div class="mb-10"><h3>#${cat}</h3>${byCat[cat].map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`).join('')}</div>`).join('');
+  }
+
+  function renderLatestPosts(targetId, limit=3){
+    const host=document.getElementById(targetId); if(!host) return;
+    const posts=readJSON(LS_KEYS.posts,[]).slice(0,limit);
+    if(!posts.length){host.innerHTML='<p>No posts yet.</p>'; return;}
+    host.innerHTML=posts.map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`).join('');
+  }
+
+  function renderPostIfNeeded(){
+    const m=location.hash.match(/^#\/post\/(.+)$/); if(!m)return;
+    const slug=m[1]; const p=readJSON(LS_KEYS.posts,[]).find(x=>x.slug===slug); if(!p){alert('Post not found');return;}
+    let wrap=document.getElementById('post-overlay'); if(!wrap){wrap=document.createElement('div'); wrap.id='post-overlay'; document.body.appendChild(wrap);}
+    wrap.innerHTML=`<button onclick="document.getElementById('post-overlay').remove()">Close</button><h2>${p.title}</h2>${p.heroUrl?`<img src="${p.heroUrl}">`:''}<div>${p.content}</div>`;
+  }
+
+  window.addEventListener('hashchange',()=>{ renderCategories(); renderPostIfNeeded(); });
+  document.addEventListener('DOMContentLoaded',()=>{ renderCategories(); renderLatestPosts('latest-posts',3); renderPostIfNeeded(); });
+})();
+</script>
+<!-- === /HUMAIRA: Full CMS + Auto-render script === -->
 
 </body>
 </html>
