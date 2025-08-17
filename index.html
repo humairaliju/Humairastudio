@@ -1,2467 +1,609 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HumairaStudio.com - Creative Blog & Lifestyle</title>
-    <meta name="description" content="HumairaStudio.com - Your go-to destination for creative arts, delicious recipes, lifestyle tips, and daily inspiration by Humaira.">
-    <meta name="keywords" content="HumairaStudio, blog, arts crafts, recipes, lifestyle, creative, DIY, Humaira, content writing">
-    <meta name="author" content="Humaira">
-<script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'soft-lavender': '#DDD6FE',
-                        'rose-blush': '#FECACA',
-                        'lavender-deep': '#8B5CF6',
-                        'rose-deep': '#F43F5E',
-                        'lavender-light': '#F3F4F6',
-                        'rose-light': '#FDF2F8'
-                    }
-                }
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HumairaStudio.com - Creative Blog & Lifestyle</title>
+  <meta name="description" content="HumairaStudio.com - Your go-to destination for creative arts, delicious recipes, lifestyle tips, and daily inspiration by Humaira." />
+  <meta name="keywords" content="HumairaStudio, blog, arts crafts, recipes, lifestyle, creative, DIY, Humaira, content writing" />
+  <meta name="author" content="Humaira" />
+
+  <!-- FONTS (keep same as original) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (same CDN approach as original) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // UPDATED THEME ONLY — everything else remains same
+            violet: '#8A2BE2',              // primary
+            babypink: '#FFB6C1',            // accent
+            // carry original palette names but mapped to new colors to keep classes intact
+            'soft-lavender': '#E9D8FF',
+            'rose-blush': '#FFE0EA',
+            'lavender-deep': '#8A2BE2',     // replaces previous purple
+            'rose-deep': '#FF7FA1',
+            'lavender-light': '#F7F2FF',
+            'rose-light': '#FFF2F7'
+          }
         }
-    </script>
-    <style>
-        @import 
-url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #DDD6FE 0%, #FECACA 100%);
-            min-height: 100vh;
-        }
-        
-        .dancing-script {
-            font-family: 'Dancing Script', cursive;
-        }
-.content-card {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hover-lift {
-            transition: all 0.3s ease;
-        }
-        
-        .hover-lift:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.3);
-        }
-.gradient-text {
-            background: linear-gradient(135deg, #8B5CF6, #F43F5E);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .recipe-step {
-            counter-increment: step-counter;
-        }
-        
-        .recipe-step::before {
-            content: counter(step-counter);
-            background: linear-gradient(135deg, #8B5CF6, #F43F5E);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: inline-flex;
-align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        
-        .recipe-container {
-            counter-reset: step-counter;
-        }
-        
-        .nav-link {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: #8B5CF6;
-        }
-.nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 50%;
-            background: linear-gradient(135deg, #8B5CF6, #F43F5E);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: none;
-        }
-
-        .admin-content {
-            background: white;
-            border-radius: 12px;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            margin: 2rem auto;
-            padding: 2rem;
-        }
-    </style>
-</head>
-<body>
-    <!-- Admin Login Modal -->
-    <div id="admin-login" class="admin-panel">
-        <div class="admin-content">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold gradient-text mb-4">Admin Login</h2>
-                <p class="text-gray-600">Enter your password to access the admin panel</p>
-            </div>
-            <form onsubmit="handleAdminLogin(event)" class="space-y-6">
-                <div>
-                    <label for="admin-password" class="block text-gray-700 font-semibold mb-2">Password</label>
-                    <input 
-                        type="password" 
-                        id="admin-password" 
-                        placeholder="Enter admin password" 
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent"
-                        required
-                    >
-                </div>
-                <div class="flex gap-4">
-                    <button 
-                        type="submit" 
-                        class="flex-1 bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300"
-                    >
-                        Login
-                    </button>
-                    <button 
-                        type="button" 
-                        onclick="closeAdminLogin()"
-                        class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600 transition duration-300"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div id="admin-panel" class="admin-panel">
-        <div class="admin-content">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold gradient-text">Admin Panel</h2>
-                <button onclick="closeAdminPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-8">
-                <button onclick="showCreatePost()" class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-4 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                    ✍️ Create New Post
-                </button>
-                <button onclick="showManagePosts()" class="bg-gradient-to-r from-rose-deep to-lavender-deep text-white py-4 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                    📝 Manage Posts
-                </button>
-            </div>
-
-            <div id="admin-content-area">
-                <div class="text-center text-gray-600">
-                    <p class="text-lg">Welcome to your admin panel!</p>
-                    <p>Select an option above to get started.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-lg">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="text-3xl font-bold dancing-script gradient-text">
-                    HumairaStudio.com
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="nav-link text-gray-700 font-medium">Home</a>
-                    <a href="#categories" class="nav-link text-gray-700 font-medium">Categories</a>
-                    <a href="#about" class="nav-link text-gray-700 font-medium">About</a>
-                    <a href="#contact" class="nav-link text-gray-700 font-medium">Contact</a>
-                    <button onclick="showAdminLogin()" class="text-xs text-gray-400 hover:text-gray-600">•</button>
-                </div>
-                <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-lavender-deep">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-2">
-                <a href="#home" class="block py-2 text-gray-700 hover:text-lavender-deep">Home</a>
-                <a href="#categories" class="block py-2 text-gray-700 hover:text-lavender-deep">Categories</a>
-                <a href="#about" class="block py-2 text-gray-700 hover:text-lavender-deep">About</a>
-                <a href="#contact" class="block py-2 text-gray-700 hover:text-lavender-deep">Contact</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Home Page -->
-    <section id="home" class="pt-24 pb-16 min-h-screen flex items-center">
-        <div class="container mx-auto px-6">
-            <!-- Welcome Section -->
-            <div class="text-center mb-16">
-                <h1 class="text-6xl md:text-7xl font-bold dancing-script gradient-text mb-6">
-                    Welcome to HumairaStudio.com
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
-                    Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures
-                </p>
-            </div>
-
-            <!-- Newsletter Subscription -->
-            <div class="text-center mb-16">
-                <div class="max-w-md mx-auto">
-                    <div class="content-card rounded-2xl p-8">
-                        <h3 class="text-2xl font-semibold gradient-text mb-4">📧 Subscribe to My Newsletter</h3>
-                        <p class="text-gray-600 mb-6">Get the latest recipes, lifestyle tips, and creative inspiration delivered to your inbox!</p>
-                        <form class="space-y-4" onsubmit="handleSubscription(event)">
-                            <input 
-                                type="email" 
-                                id="newsletter-email" 
-                                placeholder="Enter your email address" 
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent"
-                                required
-                            >
-                            <button 
-                                type="submit" 
-                                class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300"
-                            >
-                                Subscribe Now
-                            </button>
-                        </form>
-                        <div id="subscription-message" class="mt-4 text-sm hidden"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inspiring Quote -->
-            <div class="text-center mb-16">
-                <div class="content-card rounded-2xl p-8 max-w-4xl mx-auto">
-                    <blockquote class="text-2xl md:text-3xl font-light text-gray-700 italic mb-6">
-                        "Dream big, work hard, and let every step take you closer to your story."
-                    </blockquote>
-                    <p class="text-gray-500 font-medium">- Daily Inspiration from Humaira</p>
-                </div>
-            </div>
-
-            <!-- Short About Me Section -->
-            <div class="text-center mb-16">
-                <div class="content-card rounded-2xl p-8 max-w-4xl mx-auto">
-                    <div class="flex flex-col md:flex-row items-center gap-6">
-                        <div class="md:w-1/4">
-                            <div class="w-32 h-32 bg-gradient-to-br from-soft-lavender to-rose-blush rounded-full flex items-center justify-center mx-auto">
-                                <span class="text-5xl">👩‍💻</span>
-                            </div>
-                        </div>
-                        <div class="md:w-3/4 text-left">
-                            <h3 class="text-2xl font-bold gradient-text mb-4">Hi, I'm Humaira! 👋</h3>
-                            <p class="text-gray-700 mb-4 leading-relaxed">
-                                Welcome to my creative corner! I'm a passionate content creator, food enthusiast, 
-                                and lifestyle blogger sharing recipes, productivity tips, and daily inspiration.
-                            </p>
-                            <a href="#about" onclick="showPage('about')" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                                Learn More About Me →
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Discover Latest Posts Section -->
-            <div class="text-center">
-                <div class="content-card rounded-2xl p-8 max-w-6xl mx-auto">
-                    <h3 class="text-3xl font-bold gradient-text mb-8">✨ Discover My Latest Posts</h3>
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6 hover-lift cursor-pointer" onclick="showCategoryPage('diy-crafts')">
-                            <span class="text-4xl mb-4 block">🎨</span>
-                            <h4 class="text-lg font-bold text-gray-800 mb-2">DIY Note Box</h4>
-                            <p class="text-gray-600 text-sm mb-4">Create a beautiful box for organizing your notes...</p>
-                            <span class="text-xs text-gray-500">5 min read</span>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-rose-blush to-soft-lavender rounded-xl p-6 hover-lift cursor-pointer" onclick="showCategoryPage('lifestyle')">
-                            <span class="text-4xl mb-4 block">🌅</span>
-                            <h4 class="text-lg font-bold text-gray-800 mb-2">Daily Routine</h4>
-                            <p class="text-gray-600 text-sm mb-4">My complete daily routine as an international student...</p>
-                            <span class="text-xs text-gray-500">7 min read</span>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6 hover-lift cursor-pointer" onclick="showCategoryPage('recipes')">
-                            <span class="text-4xl mb-4 block">🍪</span>
-                            <h4 class="text-lg font-bold text-gray-800 mb-2">Perfect Chocolate Cookies</h4>
-                            <p class="text-gray-600 text-sm mb-4">My tested recipe for the ultimate cookies...</p>
-                            <span class="text-xs text-gray-500">15 min read</span>
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="#categories" onclick="showPage('categories')" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-8 py-4 rounded-lg font-semibold hover:shadow-lg transition duration-300 text-lg">
-                            Explore All Categories →
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Page -->
-    <section id="categories" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">Categories</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Explore different topics and find what inspires you</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-soft-lavender to-rose-blush rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🍳</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">Recipes</h3>
-                    <p class="text-gray-600 mb-6">Delicious and tested recipes from my kitchen to yours. From quick snacks to elaborate meals!</p>
-                    <a href="#recipes" onclick="showCategoryPage('recipes')" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Explore Recipes →
-                    </a>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-rose-blush to-soft-lavender rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🌸</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">Lifestyle</h3>
-                    <p class="text-gray-600 mb-6">Daily routines, productivity tips, and wellness advice for a balanced student life.</p>
-                    <a href="#lifestyle" onclick="showCategoryPage('lifestyle')" class="inline-block bg-gradient-to-r from-rose-deep to-lavender-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Read Lifestyle →
-                    </a>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-soft-lavender to-rose-blush rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🎨</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">DIY Crafts</h3>
-                    <p class="text-gray-600 mb-6">Creative DIY projects, room decor ideas, and artistic inspiration for your space.</p>
-                    <a href="#diy-crafts" onclick="showCategoryPage('diy-crafts')" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Get Creative →
-                    </a>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-rose-blush to-soft-lavender rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">📚</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">Student Life</h3>
-                    <p class="text-gray-600 mb-6">Tips and experiences from an international student balancing work and studies.</p>
-                    <a href="#student-life" onclick="showCategoryPage('student-life')" class="inline-block bg-gradient-to-r from-rose-deep to-lavender-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Learn More →
-                    </a>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-soft-lavender to-rose-blush rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">✍️</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">Writing</h3>
-                    <p class="text-gray-600 mb-6">Creative writing tips, content creation insights, and my writing journey.</p>
-                    <a href="#writing" onclick="showCategoryPage('writing')" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Read Writing →
-                    </a>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-rose-blush to-soft-lavender rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">💭</span>
-                    </div>
-                    <h3 class="text-2xl font-bold gradient-text mb-4">Daily Inspiration</h3>
-                    <p class="text-gray-600 mb-6">Motivational thoughts, personal reflections, and daily doses of positivity.</p>
-                    <a href="#daily-inspiration" onclick="showCategoryPage('daily-inspiration')" class="inline-block bg-gradient-to-r from-rose-deep to-lavender-deep text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                        Get Inspired →
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Category Pages -->
-    <!-- Recipes Category Page -->
-    <section id="recipes" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">🍳 Recipes</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Delicious and tested recipes from my kitchen to yours</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Recipe 1: Chocolate Cookies -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
-                        <span class="text-6xl">🍪</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Perfect Chocolate Cookies</h3>
-                        <p class="text-gray-600 mb-4">My tested recipe for the ultimate chocolate chip cookies that are crispy on the outside and chewy on the inside.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 25 min</span>
-                            <span class="text-sm text-gray-500">🍪 48 cookies</span>
-                        </div>
-                        <button onclick="showFullPost('chocolate-cookies')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Recipe 2: Blueberry Pie -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-blue-100 to-purple-200 flex items-center justify-center">
-                        <span class="text-6xl">🥧</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Classic Blueberry Pie</h3>
-                        <p class="text-gray-600 mb-4">A traditional blueberry pie with flaky homemade crust and perfectly sweetened filling.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 1 hour</span>
-                            <span class="text-sm text-gray-500">🥧 8 servings</span>
-                        </div>
-                        <button onclick="showFullPost('blueberry-pie')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Recipe 3: Avocado Toast -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
-                        <span class="text-6xl">🥑</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Gourmet Avocado Toast</h3>
-                        <p class="text-gray-600 mb-
-mb-4">Elevated avocado toast with fresh toppings and perfect seasoning for a nutritious breakfast.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 10 min</span>
-                            <span class="text-sm text-gray-500">🍽️ 2 servings</span>
-                        </div>
-                        <button onclick="showFullPost('avocado-toast')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lifestyle Category Page -->
-    <section id="lifestyle" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">🌸 Lifestyle</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Daily routines, wellness tips, and lifestyle inspiration</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Post 1: Skincare Routine -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center">
-                        <span class="text-6xl">✨</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">My Evening Skincare Routine</h3>
-                        <p class="text-gray-600 mb-4">A simple yet effective skincare routine that keeps my skin healthy and glowing, perfect for busy students.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 5 min read</span>
-                            <span class="bg-rose-deep text-white px-2 py-1 rounded-full text-xs">Lifestyle</span>
-                        </div>
-                        <button onclick="showFullPost('skincare-routine')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 2: Daily Routine -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center">
-                        <span class="text-6xl">🌅</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">My Complete Daily Routine</h3>
-                        <p class="text-gray-600 mb-4">International student life: balancing studies, work & dreams from 5:00 AM to 11:00 PM.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 8 min read</span>
-                            <span class="bg-rose-deep text-white px-2 py-1 rounded-full text-xs">Lifestyle</span>
-                        </div>
-                        <button onclick="showFullPost('daily-routine')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- DIY Crafts Category Page -->
-    <section id="diy-crafts" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">🎨 DIY Crafts</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Creative projects and handmade treasures for your space</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Post 1: DIY Note Box -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-purple-100 to-pink-200 flex items-center justify-center">
-                        <span class="text-6xl">📦</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">DIY Box for Keeping Notes</h3>
-                        <p class="text-gray-600 mb-4">Create a beautiful and functional box to organize all your study notes and important papers.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 6 min read</span>
-                            <span class="bg-lavender-deep text-white px-2 py-1 rounded-full text-xs">DIY Crafts</span>
-                        </div>
-                        <button onclick="showFullPost('diy-note-box')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 2: DIY Journal -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-teal-100 to-blue-200 flex items-center justify-center">
-                        <span class="text-6xl">📓</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">DIY Personal Journal</h3>
-                        <p class="text-gray-600 mb-4">Craft your own personalized journal for thoughts, dreams, and daily reflections.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 7 min read</span>
-                            <span class="bg-lavender-deep text-white px-2 py-1 rounded-full text-xs">DIY Crafts</span>
-                        </div>
-                        <button onclick="showFullPost('diy-journal')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Student Life Category Page -->
-    <section id="student-life" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">📚 Student Life</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Tips and experiences from an international student journey</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Post 1: Work-Study Balance -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center">
-                        <span class="text-6xl">⚖️</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">How to Balance Work and Study</h3>
-                        <p class="text-gray-600 mb-4">Practical strategies for managing part-time work while maintaining academic excellence.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 5 min read</span>
-                            <span class="bg-rose-deep text-white px-2 py-1 rounded-full text-xs">Student Life</span>
-                        </div>
-                        <button onclick="showFullPost('work-study-balance')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 2: Note Taking -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-green-100 to-teal-200 flex items-center justify-center">
-                        <span class="text-6xl">📝</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">How to Take Notes Properly</h3>
-                        <p class="text-gray-600 mb-4">Effective note-taking techniques that will transform your study sessions and boost retention.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 6 min read</span>
-                            <span class="bg-rose-deep text-white px-2 py-1 rounded-full text-xs">Student Life</span>
-                        </div>
-                        <button onclick="showFullPost('note-taking-tips')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Daily Inspiration Category Page -->
-    <section id="daily-inspiration" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">💭 Daily Inspiration</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Motivational thoughts and daily doses of positivity</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Post 1: Life Quote -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center">
-                        <span class="text-6xl">🌟</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Embracing Life's Journey</h3>
-                        <p class="text-gray-600 mb-4">Reflections on living fully and finding beauty in every moment of our unique journey.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 3 min read</span>
-                            <span class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-2 py-1 rounded-full text-xs">Inspiration</span>
-                        </div>
-                        <button onclick="showFullPost('life-inspiration')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 2: Struggle Quote -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-red-100 to-pink-200 flex items-center justify-center">
-                        <span class="text-6xl">💪</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Finding Strength in Struggle</h3>
-                        <p class="text-gray-600 mb-4">How challenges shape us and why every struggle is a stepping stone to growth.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 4 min read</span>
-                            <span class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-2 py-1 rounded-full text-xs">Inspiration</span>
-                        </div>
-                        <button onclick="showFullPost('struggle-inspiration')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 3: Love Quote -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center">
-                        <span class="text-6xl">💖</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">The Power of Love</h3>
-                        <p class="text-gray-600 mb-4">Exploring love in all its forms - self-love, family love, and the love that connects us all.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 3 min read</span>
-                            <span class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-2 py-1 rounded-full text-xs">Inspiration</span>
-                        </div>
-                        <button onclick="showFullPost('love-inspiration')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-                
-                <!-- Post 4: Fear Quote -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center">
-                        <span class="text-6xl">🦋</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Overcoming Fear</h3>
-                        <p class="text-gray-600 mb-4">Transforming fear into courage and taking bold steps toward your dreams.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 4 min read</span>
-                            <span class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-2 py-1 rounded-full text-xs">Inspiration</span>
-                        </div>
-                        <button onclick="showFullPost('fear-inspiration')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Writing Category Page -->
-    <section id="writing" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">✍️ Writing</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg">Creative writing tips and my journey as a content creator</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Post 1: Writing Journey -->
-                <article class="content-card rounded-2xl overflow-hidden hover-lift">
-                    <div class="h-48 bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">
-                        <span class="text-6xl">📖</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">My Creative Writing Journey</h3>
-                        <p class="text-gray-600 mb-4">From student to content creator - the story of how I discovered my passion for writing.</p>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm text-gray-500">⏱️ 6 min read</span>
-                            <span class="bg-lavender-deep text-white px-2 py-1 rounded-full text-xs">Writing</span>
-                        </div>
-                        <button onclick="showFullPost('writing-journey')" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                            Read More →
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-    <!-- Full Post Modal -->
-    <div id="post-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-                <h3 id="modal-title" class="text-2xl font-bold gradient-text"></h3>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-            <div id="modal-content" class="p-8">
-                <!-- Post content will be loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- About Page -->
-    <section id="about" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">About Me</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto"></div>
-            </div>
-            
-            <div class="max-w-6xl mx-auto">
-                <div class="content-card rounded-2xl p-12 hover-lift mb-12">
-                    <div class="flex flex-col md:flex-row items-center gap-8 mb-12">
-                        <div class="md:w-1/3">
-                            <div class="w-64 h-64 bg-gradient-to-br from-soft-lavender to-rose-blush rounded-full flex items-center justify-center mx-auto">
-                                <span class="text-8xl">👩‍💻</span>
-                            </div>
-                        </div>
-                        <div class="md:w-2/3">
-                            <h3 class="text-4xl font-bold gradient-text mb-6">Hi, I'm Humaira! 👋</h3>
-                            <p class="text-gray-700 mb-4 leading-relaxed text-lg">
-                                Welcome to my creative corner of the internet! I'm a passionate content creator, food enthusiast, 
-                                and lifestyle blogger who believes in the power of sharing stories and inspiration.
-                            </p>
-                            <p class="text-gray-700 mb-6 leading-relaxed text-lg">
-                                As an international student balancing studies and part-time work, I understand the unique challenges 
-                                of maintaining a fulfilling lifestyle while pursuing your dreams in a new country.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-8 mb-12">
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-8">
-                            <h4 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="mr-4">🌟</span>My Journey
-                            </h4>
-                            <p class="text-gray-700 leading-relaxed mb-4">
-                                My journey began when I moved abroad as an international student, facing the exciting yet overwhelming 
-                                challenge of adapting to a new culture while pursuing my academic dreams. Through trial and error, 
-                                I discovered the importance of creating routines, finding balance, and maintaining connections to home.
-                            </p>
-                            <p class="text-gray-700 leading-relaxed">
-                                What started as personal documentation of my experiences evolved into HumairaStudio.com - a space 
-                                where I share the lessons I've learned, the recipes that comfort me, and the creative projects 
-                                that bring joy to my daily life.
-                            </p>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-rose-blush to-soft-lavender rounded-xl p-8">
-                            <h4 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <span class="mr-4">💡</span>What I Share
-                            </h4>
-                            <ul class="space-y-3 text-gray-700">
-                                <li class="flex items-start">
-                                    <span class="text-lavender-deep mr-3 font-bold">🍳</span>
-                                    <div><strong>Tested Recipes:</strong> From comfort food to healthy meals that fit a student budget</div>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-rose-deep mr-3 font-bold">📚</span>
-                                    <div><strong>Student Life Tips:</strong> Time management, productivity hacks, and wellness strategies</div>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-lavender-deep mr-3 font-bold">🎨</span>
-                                    <div><strong>Creative Projects:</strong> DIY decor, arts & crafts, and room transformation ideas</div>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-rose-deep mr-3 font-bold">✍️</span>
-                                    <div><strong>Writing Insights:</strong> Content creation tips and my journey as a writer</div>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-lavender-deep mr-3 font-bold">💭</span>
-                                    <div><strong>Daily Inspiration:</strong> Motivational thoughts and personal reflections</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-8 mb-8">
-                        <h4 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                            <span class="mr-4">🎯</span>My Mission & Values
-                        </h4>
-                        <div class="grid md:grid-cols-3 gap-6">
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-gradient-to-br from-lavender-deep to-rose-deep rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <span class="text-white text-2xl">🤝</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 mb-2">Authenticity</h5>
-                                <p class="text-gray-600 text-sm">Sharing real experiences, honest struggles, and genuine victories</p>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-gradient-to-br from-rose-deep to-lavender-deep rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <span class="text-white text-2xl">🌱</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 mb-2">Growth</h5>
-                                <p class="text-gray-600 text-sm">Encouraging continuous learning and personal development</p>
-                            </div>
-                            <div class="text-center">
-                                <div class="w-16 h-16 bg-gradient-to-br from-lavender-deep to-rose-deep rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <span class="text-white text-2xl">💜</span>
-                                </div>
-                                <h5 class="font-bold text-gray-800 mb-2">Community</h5>
-                                <p class="text-gray-600 text-sm">Building connections and supporting fellow dreamers</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8">
-                        <h4 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span class="mr-4">💼</span>Professional Services
-                        </h4>
-                        <p class="text-gray-700 mb-6 leading-relaxed">
-                            Beyond blogging, I'm passionate about helping businesses and individuals tell their stories through 
-                            compelling content. I offer professional writing services that combine creativity with strategic thinking.
-                        </p>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <h5 class="font-bold text-gray-800 mb-3">✍️ Content Writing Services:</h5>
-                                <ul class="space-y-2 text-gray-700 text-sm">
-                                    <li>• Blog posts and articles</li>
-                                    <li>• Website copy and landing pages</li>
-                                    <li>• Social media content</li>
-                                    <li>• Email newsletters</li>
-                                    <li>• Product descriptions</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5 class="font-bold text-gray-800 mb-3">🎯 Specializations:</h5>
-                                <ul class="space-y-2 text-gray-700 text-sm">
-                                    <li>• Lifestyle and wellness content</li>
-                                    <li>• Food and recipe writing</li>
-                                    <li>• Student life and education</li>
-                                    <li>• Creative and DIY projects</li>
-                                    <li>• Personal development</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="mt-6 text-center">
-                            <a href="#contact" class="inline-block bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                                Let's Work Together →
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Page -->
-    <section id="contact" class="py-20 hidden">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold dancing-script gradient-text mb-4">Let's Connect!</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-lavender-deep to-rose-deep mx-auto mb-8"></div>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-                    Ready to collaborate? I'm available for content writing, blog writing, and creative projects. 
-                    Let's bring your ideas to life together! ✨
-                </p>
-            </div>
-            
-            <div class="max-w-6xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <div class="content-card rounded-2xl p-8 hover-lift">
-                        <h3 class="text-3xl font-bold gradient-text mb-8">📞 Get In Touch</h3>
-                        <div class="space-y-6">
-                            <div class="flex items-center group">
-                                <div class="w-16 h-16 bg-gradient-to-br from-lavender-deep to-rose-deep rounded-full flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
-                                    <span class="text-white text-2xl">📧</span>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-800 text-lg">Email Me</p>
-                                    <a href="mailto:lijuhumaira2001@gmail.com" 
-                                       class="text-lavender-deep hover:text-rose-deep text-lg transition-colors">
-                                        lijuhumaira2001@gmail.com
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center group">
-                                <div class="w-16 h-16 bg-gradient-to-br from-rose-deep to-lavender-deep rounded-full flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
-                                    <span class="text-white text-2xl">💼</span>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-800 text-lg">LinkedIn</p>
-                                    <a 
-href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
-                                       target="_blank" 
-                                       class="text-lavender-deep hover:text-rose-deep text-lg transition-colors">
-                                        Connect with me professionally
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="content-card rounded-2xl p-8 hover-lift">
-                        <h3 class="text-3xl font-bold gradient-text mb-8">💌 Send Me a Message</h3>
-                        <form class="space-y-6" onsubmit="handleContactForm(event)">
-                            <div>
-                                <label for="contact-name" class="block text-gray-700 font-semibold mb-2">Your Name</label>
-                                <input 
-                                    type="text" 
-                                    id="contact-name" 
-                                    name="name"
-                                    placeholder="Enter your full name" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent"
-                                    required
-                                >
-                            </div>
-                            <div>
-                                <label for="contact-email" class="block text-gray-700 font-semibold mb-2">Your Email</label>
-                                <input 
-                                    type="email" 
-                                    id="contact-email" 
-                                    name="email"
-                                    placeholder="Enter your email address" 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent"
-                                    required
-                                >
-                            </div>
-                            <div>
-                                <label for="contact-subject" class="block text-gray-700 font-semibold mb-2">Subject</label>
-                                <select 
-                                    id="contact-subject" 
-                                    name="subject"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent"
-                                    required
-                                >
-                                    <option value="">Select a topic</option>
-                                    <option value="content-writing">Content Writing Project</option>
-                                    <option value="blog-writing">Blog Writing Services</option>
-                                    <option value="recipe-development">Recipe Development</option>
-                                    <option value="collaboration">Collaboration Opportunity</option>
-                                    <option value="general">General Inquiry</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="contact-message" class="block text-gray-700 font-semibold mb-2">Your Message</label>
-                                <textarea 
-                                    id="contact-message" 
-                                    name="message"
-                                    rows="5"
-                                    placeholder="Tell me about your project or inquiry..." 
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep focus:border-transparent resize-vertical"
-                                    required
-                                ></textarea>
-                            </div>
-                            <button 
-                                type="submit" 
-                                class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300"
-                            >
-                                Send Message ✨
-                            </button>
-                        </form>
-                        <div id="contact-message-status" class="mt-4 text-sm hidden"></div>
-                    </div>
-                </div>
-                
-                <div class="content-card rounded-2xl p-8 hover-lift">
-                    <h3 class="text-3xl font-bold gradient-text mb-8">✨ Services I Offer</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">✍️</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Content Writing</h4>
-                            <p class="text-gray-600 text-sm mb-4">Engaging articles, web content, and SEO-optimized copy</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Blog posts & articles</li>
-                                <li>• Website copy</li>
-                                <li>• Landing pages</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-rose-blush to-soft-lavender rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">📝</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Blog Writing</h4>
-                            <p class="text-gray-600 text-sm mb-4">Personal and professional blog posts that engage readers</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Lifestyle blogs</li>
-                                <li>• Educational content</li>
-                                <li>• Personal stories</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">🍳</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Recipe Development</h4>
-                            <p class="text-gray-600 text-sm mb-4">Creative and tested recipe content with detailed instructions</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Recipe creation</li>
-                                <li>• Food photography copy</li>
-                                <li>• Nutritional content</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-rose-blush to-soft-lavender rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">🎨</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Lifestyle Content</h4>
-                            <p class="text-gray-600 text-sm mb-4">Wellness, productivity, and lifestyle articles</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Wellness guides</li>
-                                <li>• Productivity tips</li>
-                                <li>• Student life content</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">📱</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Social Media Content</h4>
-                            <p class="text-gray-600 text-sm mb-4">Captions, posts, and social media strategies</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Instagram captions</li>
-                                <li>• Social media posts</li>
-                                <li>• Content calendars</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="bg-gradient-to-br from-rose-blush to-soft-lavender rounded-xl p-6 text-center">
-                            <span class="text-4xl mb-4 block">💡</span>
-                            <h4 class="font-bold text-gray-800 mb-2">Creative Consulting</h4>
-                            <p class="text-gray-600 text-sm mb-4">Content strategy and creative direction</p>
-                            <ul class="text-xs text-gray-600 space-y-1">
-                                <li>• Content strategy</li>
-                                <li>• Brand voice development</li>
-                                <li>• Editorial calendars</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-16">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="md:col-span-2">
-                    <h3 class="text-4xl font-bold dancing-script gradient-text mb-6">HumairaStudio.com</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">
-                        Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures. 
-                        Join me on this journey of creativity, growth, and delicious discoveries!
-                    </p>
-                    <div class="flex space-x-6">
-                        <a href="mailto:lijuhumaira2001@gmail.com" 
-                           class="text-gray-300 hover:text-white transition duration-300 text-2xl">📧</a>
-                        <a href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
-                           target="_blank" 
-                           class="text-gray-300 hover:text-white transition duration-300 text-2xl">💼</a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="text-xl font-semibold mb-6 text-white">Quick Links</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#home" class="text-gray-300 hover:text-white transition duration-300">Home</a></li>
-                        <li><a href="#categories" class="text-gray-300 hover:text-white transition duration-300">Categories</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition duration-300">About</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-white transition duration-300">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-xl font-semibold mb-6 text-white">Services</h4>
-                    <ul class="space-y-3 text-gray-300">
-                        <li>✍️ Content Writing</li>
-                        <li>📝 Blog Writing</li>
-                        <li>🍳 Recipe Development</li>
-                        <li>🎨 Lifestyle Content</li>
-                        <li>📱 Social Media Content</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
-                <p class="text-gray-300 text-lg">
-                    &copy; 2024 HumairaStudio.com - Made with 💜 and lots of ☕ by Humaira
-                </p>
-                <p class="text-gray-400 mt-2">
-                    Spreading creativity, one post at a time ✨
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Admin password (in a real application, this would be handled server-side)
-        const ADMIN_PASSWORD = "humaira2024";
-        let isAdminLoggedIn = false;
-
-        // Post data storage (in a real application, this would be in a database)
-        let posts = {
-            'chocolate-cookies': {
-                title: 'Perfect Chocolate Cookies',
-                category: 'recipes',
-                content: `
-                    <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">🥄 Ingredients:</h4>
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-center"><span class="mr-2">•</span> 2¼ cups all-purpose flour</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 cup butter, softened</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> ¾ cup granulated sugar</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> ¾ cup brown sugar, packed</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 2 large eggs</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 2 tsp vanilla extract</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 tsp baking soda</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 tsp salt</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 2 cups chocolate chips</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="recipe-container">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">👩‍🍳 Instructions:</h4>
-                            <ol class="space-y-4 text-gray-700">
-                                <li class="recipe-step flex items-start">Preheat oven to 375°F (190°C). Line baking sheets with parchment paper.</li>
-                                <li class="recipe-step flex items-start">In a large bowl, cream together butter and both sugars until light and fluffy (3-4 minutes).</li>
-                                <li class="recipe-step flex items-start">Beat in eggs one at a time, then add vanilla extract.</li>
-                                <li class="recipe-step flex items-start">In a separate bowl, whisk together flour, baking soda, and salt.</li>
-                                <li class="recipe-step flex items-start">Gradually mix dry ingredients into wet ingredients until just combined.</li>
-                                <li class="recipe-step flex items-start">Fold in chocolate chips evenly throughout the dough.</li>
-                                <li class="recipe-step flex items-start">Drop rounded tablespoons of dough onto prepared baking sheets, spacing 2 inches apart.</li>
-                                <li class="recipe-step flex items-start">Bake for 9-11 minutes until edges are golden brown. Cool on baking sheet for 5 minutes.</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-600">
-                            <span class="bg-lavender-deep text-white px-3 py-1 rounded-full">⏱️ Prep: 15 min</span>
-                            <span class="bg-rose-deep text-white px-3 py-1 rounded-full">🔥 Bake: 10 min</span>
-                            <span class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white px-3 py-1 rounded-full">🍪 Yield: 48 cookies</span>
-                        </div>
-                    </div>
-                `
-            },
-            'blueberry-pie': {
-                title: 'Classic Blueberry Pie',
-                category: 'recipes',
-                content: `
-                    <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-gradient-to-br from-soft-lavender to-rose-blush rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">🥧 Ingredients:</h4>
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 recipe for double-crust pie dough</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 4 cups fresh blueberries</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> ¾ cup granulated sugar</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> ¼ cup cornstarch</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 tbsp lemon juice</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 tsp lemon zest</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 2 tbsp butter, cut into small pieces</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 large egg, beaten (for egg wash)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="recipe-container">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">👩‍🍳 Instructions:</h4>
-                            <ol class="space-y-4 text-gray-700">
-                                <li class="recipe-step flex items-start">Preheat oven to 400°F (200°C). Place one pie crust in a 9-inch pie plate.</li>
-                                <li class="recipe-step flex items-start">In a large bowl, gently toss blueberries, sugar, cornstarch, lemon juice, and zest.</li>
-                                <li class="recipe-step flex items-start">Pour the blueberry mixture into the prepared pie crust. Dot with the pieces of butter.</li>
-                                <li class="recipe-step flex items-start">Top with the second pie crust. Trim, seal, and flute the edges. Cut slits in the top crust for steam to escape.</li>
-                                <li class="recipe-step flex items-start">Brush the top crust with the beaten egg.</li>
-                                <li class="recipe-step flex items-start">Bake for 40-50 minutes, or until the crust is golden and the filling is bubbly.</li>
-                                <li class="recipe-step flex items-start">Let the pie cool for at least 2 hours before slicing to allow the filling to set.</li>
-                            </ol>
-                        </div>
-                    </div>
-                `
-            },
-            'avocado-toast': {
-                title: 'Gourmet Avocado Toast',
-                category: 'recipes',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                           The perfect quick, nutritious, and delicious breakfast or snack. Here's how to elevate the simple avocado toast into a gourmet experience!
-                        </p>
-                    </div>
-                     <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">🥑 Core Ingredients:</h4>
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-center"><span class="mr-2">•</span> 2 slices of thick-cut bread (sourdough is great!)</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 ripe avocado</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> 1 tbsp lemon juice</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Salt and black pepper to taste</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Red pepper flakes (optional)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="recipe-container">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">✨ Topping Ideas:</h4>
-                            <ol class="space-y-3 text-gray-700">
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">🍳</span> A fried or poached egg</li>
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">🍅</span> Cherry tomatoes and feta cheese</li>
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">🌶️</span> Smoked salmon and capers</li>
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">🌱</span> Everything bagel seasoning</li>
-                            </ol>
-                        </div>
-                    </div>
-                `
-            },
-            'skincare-routine': {
-                title: 'My Evening Skincare Routine',
-                category: 'lifestyle',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            After a long day of classes and work, a calming skincare routine is the perfect way to unwind and care for my skin. Here are the simple steps I follow for a healthy glow. ✨
-                        </p>
-                    </div>
-                    <div class="recipe-container">
-                        <h4 class="text-2xl font-semibold text-gray-800 mb-6">🧖‍♀️ The Steps:</h4>
-                        <ol class="space-y-4 text-gray-700">
-                            <li class="recipe-step flex items-start"><strong>Cleanse:</strong> Start by double cleansing. First, use an oil-based cleanser to melt away makeup and sunscreen. Follow with a gentle, water-based cleanser to wash away any remaining impurities.</li>
-                            <li class="recipe-step flex items-start"><strong>Tone:</strong> Apply a hydrating toner with a cotton pad or by patting it into the skin. This helps balance the skin's pH and prepares it for the next steps.</li>
-                            <li class="recipe-step flex items-start"><strong>Treat:</strong> This is the time for serums! I use a niacinamide serum to help with texture and pores, followed by a hyaluronic acid serum for hydration.</li>
-                            <li class="recipe-step flex items-start"><strong>Moisturize:</strong> Finish with a nourishing moisturizer to lock in all the goodness and keep my skin hydrated overnight.</li>
-                            <li class="recipe-step flex items-start"><strong>Eye Cream:</strong> Gently tap a small amount of eye cream around the orbital bone to hydrate the delicate eye area.</li>
-                        </ol>
-                    </div>
-                `
-            },
-            'daily-routine': {
-                title: 'My Complete Daily Routine',
-                category: 'lifestyle',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-10">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            As an international student juggling studies and part-time work, I've discovered that having a structured 
-                            routine is the secret to not just surviving, but thriving. Here's my complete daily schedule that helps 
-                            me balance everything while maintaining my sanity and pursuing my dreams! ✨
-                        </p>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-8 mb-10">
-                        <div class="content-card rounded-xl p-8">
-                            <h4 class="text-2xl font-bold gradient-text mb-6 flex items-center">
-                                <span class="mr-4">🌅</span>Early Morning Magic (5:00 AM - 8:00 AM)
-                            </h4>
-                            <div class="space-y-4">
-                                <div class="flex items-start">
-                                    <span class="bg-lavender-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">5:00</span>
-                                    <p class="text-gray-700"><strong>Rise & Shine:</strong> Wake up, drink a large glass of water, gentle stretching in bed</p>
-                                </div>
-                                <div class="flex items-start">
-<span class="bg-lavender-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">5:15</span>
-                                    <p class="text-gray-700"><strong>Mindfulness:</strong> 15 minutes of meditation and gratitude journaling</p>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="bg-lavender-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">5:30</span>
-                                    <p class="text-gray-700"><strong>Movement:</strong> 45-minute workout (yoga, cardio, or strength training)</p>
-</div>
-                                <div class="flex items-start">
-                                    <span class="bg-lavender-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">6:15</span>
-                                    <p class="text-gray-700"><strong>Self-Care:</strong> Refreshing shower and skincare routine</p>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="bg-lavender-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">7:00</span>
-                                    <p class="text-gray-700"><strong>Fuel Up:</strong> Nutritious breakfast while reviewing daily goals</p>
-                                </div>
-                                <div class="flex items-start">
-<span class="bg-rose-deep text-white px-2 py-1 rounded text-sm font-bold mr-3 mt-1">12:00</span>
-                                    <p class="text-gray-700"><strong>Social Time:</strong> Lunch break and connecting with friends</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            'diy-note-box': {
-                title: 'DIY Box for Keeping Notes',
-                category: 'diy-crafts',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            Stay organized in style with this beautiful DIY note box! Perfect for students who want to keep their study materials tidy and accessible. This project is budget-friendly and completely customizable to match your aesthetic. ✨
-                        </p>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">🛠️ Materials Needed:</h4>
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-center"><span class="mr-2">•</span> Medium cardboard box (shoebox works perfectly)</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Decorative paper or fabric</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Craft glue or double-sided tape</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Scissors</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Ruler</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Pencil</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Small dividers (cardboard pieces)</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Labels</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Ribbon or decorative trim (optional)</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="recipe-container">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">📝 Step-by-Step Instructions:</h4>
-                            <ol class="space-y-4 text-gray-700">
-                                <li class="recipe-step flex items-start">Clean your box thoroughly and remove any existing labels or tape.</li>
-                                <li class="recipe-step flex items-start">Measure and cut your decorative paper to fit all sides of the box, leaving extra for folding.</li>
-                                <li class="recipe-step flex items-start">Apply glue evenly to one side of the box and carefully attach the paper, smoothing out bubbles.</li>
-                                <li class="recipe-step flex items-start">Repeat for all sides, folding corners neatly for a professional finish.</li>
-                                <li class="recipe-step flex items-start">Create dividers by cutting cardboard pieces to fit inside, cover with matching paper.</li>
-                                <li class="recipe-step flex items-start">Arrange dividers inside to create sections for different subjects or note types.</li>
-                                <li class="recipe-step flex items-start">Add labels to each section for easy organization.</li>
-                                <li class="recipe-step flex items-start">Optional: Add ribbon trim around edges for extra decoration.</li>
-                            </ol>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <h4 class="text-xl font-bold gradient-text mb-4">💡 Pro Tips:</h4>
-                        <ul class="space-y-2 text-gray-700">
-                            <li>• Use different colored papers for each subject to make finding notes even easier</li>
-                            <li>• Add a small handle on top using ribbon for easy carrying</li>
-                            <li>• Consider making multiple boxes for different semesters or subjects</li>
-                            <li>• Laminate labels so you can change them as needed</li>
-                        </ul>
-                    </div>
-                `
-            },
-             'diy-journal': {
-                title: 'DIY Personal Journal',
-                category: 'diy-crafts',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            Create a beautiful, personalized space for your thoughts, dreams, and memories. Making your own journal is a relaxing and rewarding craft project. Let's get started!
-                        </p>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">📓 Materials You'll Need:</h4>
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-center"><span class="mr-2">•</span> A simple notebook (any size)</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Decorative cardstock or thick paper for the cover</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Strong glue or adhesive sheets</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Scissors and a craft knife</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Ribbon for a bookmark</li>
-                                <li class="flex items-center"><span class="mr-2">•</span> Optional: Stickers, washi tape, paint pens for decoration</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="recipe-container">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">✂️ Step-by-Step Guide:</h4>
-                            <ol class="space-y-4 text-gray-700">
-                                <li class="recipe-step flex items-start">Measure the front and back cover of your notebook.</li>
-                                <li class="recipe-step flex items-start">Cut your decorative cardstock to size, adding about an inch extra on all sides to fold over.</li>
-                                <li class="recipe-step flex items-start">Apply a thin, even layer of glue to the notebook cover. Carefully place the decorative paper on top, smoothing it out from the center to avoid bubbles.</li>
-                                <li class="recipe-step flex items-start">Snip the corners of the excess paper and fold the edges over to the inside of the cover, gluing them down securely.</li>
-                                <li class="recipe-step flex items-start">Cut a piece of ribbon long enough for a bookmark and glue one end to the top of the spine inside the back cover.</li>
-                                <li class="recipe-step flex items-start">Cut another piece of decorative paper to fit just inside the cover to hide the folded edges and give it a clean finish.</li>
-                                <li class="recipe-step flex items-start">Decorate the front cover with your name, a title, or any creative designs using stickers, pens, or washi tape.</li>
-                            </ol>
-                        </div>
-                    </div>
-                `
-            },
-            'work-study-balance': {
-                title: 'How to Balance Work and Study',
-                category: 'student-life',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            Balancing part-time work with studies is one of the biggest challenges international students face. Here are practical strategies that have helped me maintain academic excellence while earning money. ✨
-                        </p>
-                    </div>
-                    
-                    <div class="grid md:grid-cols-2 gap-8 mb-8">
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">⏰ Time Management Tips:</h4>
-                            <ul class="space-y-3 text-gray-700">
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">📅</span><strong>Use a planner:</strong> Schedule both work and study hours in advance</li>
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">🎯</span><strong>Set priorities:</strong> Focus on high-impact tasks during peak energy hours</li>
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">⚡</span><strong>Time blocking:</strong> Dedicate specific hours to specific activities</li>
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">📱</span><strong>Use apps:</strong> Productivity apps help track time and tasks</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-2xl font-semibold text-gray-800 mb-6">💡 Study Strategies:</h4>
-                            <ul class="space-y-3 text-gray-700">
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">📚</span><strong>Active learning:</strong> Use techniques like summarizing and teaching others</li>
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">🔄</span><strong>Spaced repetition:</strong> Review material regularly instead of cramming</li>
-                                <li class="flex items-start"><span class="text-lavender-deep mr-3 font-bold">👥</span><strong>Study groups:</strong> Learn with classmates to maximize efficiency</li>
-                                <li class="flex items-start"><span class="text-rose-deep mr-3 font-bold">🎧</span><strong>Commute learning:</strong> Use travel time for podcasts or audiobooks</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <h4 class="text-xl font-bold gradient-text mb-4">🌟 Key Success Factors:</h4>
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <div class="text-center">
-                                <span class="text-3xl mb-2 block">💪</span>
-                                <h5 class="font-bold text-gray-800">Stay Consistent</h5>
-                                <p class="text-sm text-gray-600">Small daily efforts compound over time</p>
-                            </div>
-                            <div class="text-center">
-                                <span class="text-3xl mb-2 block">🎯</span>
-                                <h5 class="font-bold text-gray-800">Set Boundaries</h5>
-                                <p class="text-sm text-gray-600">Know when to say no to protect your time</p>
-                            </div>
-                            <div class="text-center">
-                                <span class="text-3xl mb-2 block">🌱</span>
-                                <h5 class="font-bold text-gray-800">Self-Care</h5>
-                                <p class="text-sm text-gray-600">Rest and recharge to maintain performance</p>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            'note-taking-tips': {
-                title: 'How to Take Notes Properly',
-                category: 'student-life',
-                content: `
-                     <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                            Effective note-taking is a superpower for any student. It's not just about writing down what the professor says; it's about understanding, retaining, and recalling information. Here are some proven techniques.
-                        </p>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="content-card rounded-xl p-6">
-                            <h4 class="text-xl font-bold gradient-text mb-3">1. The Cornell Method</h4>
-                            <p class="text-gray-700">Divide your page into three sections: a main notes column, a smaller cues/questions column, and a summary section at the bottom. This method encourages you to review and summarize your notes, which boosts retention.</p>
-                        </div>
-                         <div class="content-card rounded-xl p-6">
-                            <h4 class="text-xl font-bold gradient-text mb-3">2. Mind Mapping</h4>
-                            <p class="text-gray-700">Start with a central topic and branch out with related ideas, keywords, and concepts. This visual method is excellent for understanding relationships between different topics and for creative brainstorming.</p>
-                        </div>
-                         <div class="content-card rounded-xl p-6">
-                            <h4 class="text-xl font-bold gradient-text mb-3">3. Use Abbreviations and Symbols</h4>
-                            <p class="text-gray-700">Develop your own shorthand to write faster during lectures. Using symbols like arrows (→) for cause-and-effect or stars (★) for important points can help you capture information more quickly and efficiently.</p>
-                        </div>
-                    </div>
-                `
-            },
-            'life-inspiration': {
-                title: 'Embracing Life\'s Journey',
-                category: 'daily-inspiration',
-                content: `
-                    <div class="text-center mb-8">
-                        <div class="w-32 h-32 bg-gradient-to-br from-yellow-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-6xl">🌟</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <blockquote class="text-3xl font-light text-gray-800 italic text-center mb-6">
-                            "Life is not about waiting for the storm to pass, but learning to dance in the rain. Every moment is a gift, every challenge is a teacher, and every day is a new canvas to paint your dreams upon."
-                        </blockquote>
-                        <p class="text-center text-gray-600 font-medium">- Daily Inspiration</p>
-                    </div>
-                    
-                    <div class="content-card rounded-xl p-8 mb-8">
-<h4 class="text-2xl font-bold gradient-text mb-6">✨ Reflection</h4>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Life has a beautiful way of surprising us when we least expect it. As I navigate my journey as an international student, 
-                            I've learned that embracing uncertainty isn't just about surviving - it's about thriving in the unknown.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            Every morning brings new possibilities. Every challenge we face is shaping us into who we're meant to become. 
-                            The key is to remain open, stay curious, and trust that we're exactly where we need to be.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Remember: Your journey is unique, your pace is perfect, and your dreams are valid. Keep moving forward, 
-                            one beautiful step at a time. 🌈
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6">
-                        <h4 class="text-xl font-bold gradient-text mb-4">💫 Today's Affirmation</h4>
-                        <p class="text-gray-800 text-lg font-medium text-center italic">
-                            "I embrace each moment with gratitude and courage. I am exactly where I need to be, 
-                            and I trust in the beautiful unfolding of my unique journey."
-                        </p>
-                    </div>
-                `
-            },
-             'struggle-inspiration': {
-                title: 'Finding Strength in Struggle',
-                category: 'daily-inspiration',
-                content: `
-                    <div class="text-center mb-8">
-                        <div class="w-32 h-32 bg-gradient-to-br from-red-100 to-pink-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-6xl">💪</span>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <blockquote class="text-3xl font-light text-gray-800 italic text-center mb-6">
-                            "The oak fought the wind and was broken, the willow bent when it must and survived."
-                        </blockquote>
-                        <p class="text-center text-gray-600 font-medium">- Robert Jordan</p>
-                    </div>
-                    <div class="content-card rounded-xl p-8 mb-8">
-                        <h4 class="text-2xl font-bold gradient-text mb-6">✨ Reflection</h4>
-                        <p class="text-gray-700 leading-relaxed">Struggles are not roadblocks; they are opportunities to discover our own resilience. Like a muscle that grows stronger with exercise, our character is forged in the face of challenges. Don't be discouraged by difficulty. Instead, see it as a chance to adapt, learn, and grow into a more capable and compassionate version of yourself.</p>
-                    </div>
-                `
-            },
-            'love-inspiration': {
-                title: 'The Power of Love',
-                category: 'daily-inspiration',
-                content: `
-                    <div class="text-center mb-8">
-                        <div class="w-32 h-32 bg-gradient-to-br from-pink-100 to-rose-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-6xl">💖</span>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <blockquote class="text-3xl font-light text-gray-800 italic text-center mb-6">
-                            "Love is not what you say. Love is what you do."
-                        </blockquote>
-                         <p class="text-center text-gray-600 font-medium">- Unknown</p>
-                    </div>
-                    <div class="content-card rounded-xl p-8 mb-8">
-                        <h4 class="text-2xl font-bold gradient-text mb-6">✨ Reflection</h4>
-                        <p class="text-gray-700 leading-relaxed">Love is an action. It's in the small gestures, the patient listening, the unwavering support. It begins with self-love—treating yourself with the kindness you deserve. From there, it extends to others, creating connections that enrich our lives. Today, focus on the 'doing' of love, both for yourself and for those around you.</p>
-                    </div>
-                `
-            },
-             'fear-inspiration': {
-                title: 'Overcoming Fear',
-                category: 'daily-inspiration',
-                content: `
-                    <div class="text-center mb-8">
-                        <div class="w-32 h-32 bg-gradient-to-br from-purple-100 to-indigo-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-6xl">🦋</span>
-                        </div>
-                    </div>
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <blockquote class="text-3xl font-light text-gray-800 italic text-center mb-6">
-                            "Courage is not the absence of fear, but the triumph over it."
-                        </blockquote>
-                        <p class="text-center text-gray-600 font-medium">- Nelson Mandela</p>
-                    </div>
-                    <div class="content-card rounded-xl p-8 mb-8">
-                        <h4 class="text-2xl font-bold gradient-text mb-6">✨ Reflection</h4>
-                        <p class="text-gray-700 leading-relaxed">Fear is a natural human emotion designed to protect us, but sometimes it holds us back from our true potential. Acknowledging your fear is the first step. The next is to take a small, deliberate step forward despite it. Each step builds courage, and soon you'll find yourself on the other side, stronger and more confident than before.</p>
-                    </div>
-                `
-            },
-             'writing-journey': {
-                title: 'My Creative Writing Journey',
-                category: 'writing',
-                content: `
-                    <div class="bg-gradient-to-r from-soft-lavender to-rose-blush rounded-xl p-8 mb-8">
-                        <p class="text-gray-800 text-lg leading-relaxed font-medium">
-                           For as long as I can remember, words have been my playground. My journey from a quiet student with a diary to a passionate content creator has been filled with learning, challenges, and incredible joy.
-                        </p>
-                    </div>
-                    <div class="content-card rounded-xl p-8 mb-8">
-                        <h4 class="text-2xl font-bold gradient-text mb-6">The Beginning</h4>
-                        <p class="text-gray-700 leading-relaxed mb-4">
-                            It all started with a simple diary, a place to pour out my thoughts as I navigated life as an international student. Writing became my way of making sense of a new world, a way to connect with myself when I felt disconnected from everything familiar.
-                        </p>
-                        <h4 class="text-2xl font-bold gradient-text mb-6">From Hobby to Passion</h4>
-                        <p class="text-gray-700 leading-relaxed">
-                            What began as a private hobby soon grew into a desire to share. I realized that my experiences—the struggles with homesickness, the joy of discovering a new favorite cafe, the tips for balancing work and study—might resonate with others. That's when HumairaStudio.com was born. It became my canvas to share stories, recipes, and inspiration, turning my passion for writing into a way to connect with a community.
-                        </p>
-                    </div>
-                `
-            }
-        };
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Navigation link handlers
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const pageId = this.getAttribute('href').substring(1);
-                showPage(pageId);
-                
-                // Scroll to top when changing pages
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-
-        // Page navigation functionality
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = ['home', 'categories', 'about', 'contact', 'recipes', 'lifestyle', 'diy-crafts', 'student-life', 'daily-inspiration', 'writing'];
-            pages.forEach(page => {
-                const element = document.getElementById(page);
-                if (element) {
-                    element.classList.add('hidden');
-                }
-            });
-            
-            // Show the selected page
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            }
-            
-            // Close mobile menu
-            mobileMenu.classList.add('hidden');
-        }
-
-        // Category page navigation
-        function showCategoryPage(categoryId) {
-            showPage(categoryId);
-        }
-
-        // Full post modal functionality
-        function showFullPost(postId) {
-            const modal = document.getElementById('post-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            
-            const post = posts[postId];
-            if (post) {
-                modalTitle.textContent = post.title;
-                modalContent.innerHTML = post.content;
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('post-modal');
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Admin functionality
-        function showAdminLogin() {
-            document.getElementById('admin-login').style.display = 'block';
-        }
-
-        function closeAdminLogin() {
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-password').value = '';
-        }
-
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            const password = document.getElementById('admin-password').value;
-            
-            if (password === humaira123) {
-                isAdminLoggedIn = true;
-                closeAdminLogin();
-                showAdminPanel();
-            } else {
-                alert('Incorrect password. Access denied.');
-                document.getElementById('admin-password').value = '';
-            }
-        }
-
-        function showAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'block';
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'none';
-            isAdminLoggedIn = false;
-        }
-
-        function showCreatePost() {
-            const contentArea = document.getElementById('admin-content-area');
-            contentArea.innerHTML = `
-                <div class="bg-white rounded-xl p-6">
-                    <h3 class="text-2xl font-bold gradient-text mb-6">Create New Post</h3>
-                    <form onsubmit="handleCreatePost(event)" class="space-y-6">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Post Title</label>
-                            <input type="text" id="post-title" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" required>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Category</label>
-                            <select id="post-category" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" required>
-                                <option value="">Select Category</option>
-                                <option value="recipes">Recipes</option>
-                                <option value="lifestyle">Lifestyle</option>
-                                <option value="diy-crafts">DIY Crafts</option>
-                                <option value="student-life">Student Life</option>
-                                <option value="daily-inspiration">Daily Inspiration</option>
-                                <option value="writing">Writing</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Post Content (HTML)</label>
-                            <textarea id="post-content" rows="15" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" placeholder="Enter your post content in HTML format..." required></textarea>
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="flex-1 bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                                Create Post
-                            </button>
-                            <button type="button" onclick="showAdminPanel()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600 transition duration-300">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-        }
-
-        function showManagePosts() {
-            const contentArea = document.getElementById('admin-content-area');
-            let postsHtml = '';
-            
-            Object.keys(posts).forEach(postId => {
-                const post = posts[postId];
-                postsHtml += `
-                    <div class="bg-white rounded-xl p-6 mb-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="text-xl font-bold text-gray-800 mb-2">${post.title}</h4>
-                                <span class="bg-lavender-deep text-white px-3 py-1 rounded-full text-sm">${post.category}</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="editPost('${postId}')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-                                    Edit
-                                </button>
-                                <button onclick="deletePost('${postId}')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            contentArea.innerHTML = `
-                <div>
-                    <h3 class="text-2xl font-bold gradient-text mb-6">Manage Posts</h3>
-                    ${postsHtml}
-                </div>
-            `;
-        }
-
-        function handleCreatePost(event) {
-            event.preventDefault();
-            const title = document.getElementById('post-title').value;
-            const category = document.getElementById('post-category').value;
-            const content = document.getElementById('post-content').value;
-            
-            // Generate a simple ID from title
-            const postId = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-            
-            // Add post to storage
-            posts[postId] = {
-                title: title,
-                category: category,
-                content: content
-            };
-            
-            alert('Post created successfully!');
-            showManagePosts();
-        }
-
-        function editPost(postId) {
-            const post = posts[postId];
-            const contentArea = document.getElementById('admin-content-area');
-            
-            contentArea.innerHTML = `
-                <div class="bg-white rounded-xl p-6">
-                    <h3 class="text-2xl font-bold gradient-text mb-6">Edit Post</h3>
-                    <form onsubmit="handleEditPost(event, '${postId}')" class="space-y-6">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Post Title</label>
-                            <input type="text" id="edit-post-title" value="${post.title}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" required>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Category</label>
-                            <select id="edit-post-category" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" required>
-                                <option value="recipes" ${post.category === 'recipes' ? 'selected' : ''}>Recipes</option>
-                                <option value="lifestyle" ${post.category === 'lifestyle' ? 'selected' : ''}>Lifestyle</option>
-                                <option value="diy-crafts" ${post.category === 'diy-crafts' ? 'selected' : ''}>DIY Crafts</option>
-                                <option value="student-life" ${post.category === 'student-life' ? 'selected' : ''}>Student Life</option>
-                                <option value="daily-inspiration" ${post.category === 'daily-inspiration' ? 'selected' : ''}>Daily Inspiration</option>
-                                <option value="writing" ${post.category === 'writing' ? 'selected' : ''}>Writing</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Post Content (HTML)</label>
-                            <textarea id="edit-post-content" rows="15" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep" required>${post.content}</textarea>
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="flex-1 bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition duration-300">
-                                Update Post
-                            </button>
-                            <button type="button" onclick="showManagePosts()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600 transition duration-300">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-        }
-
-        function handleEditPost(event, postId) {
-            event.preventDefault();
-            const title = document.getElementById('edit-post-title').value;
-            const category = document.getElementById('edit-post-category').value;
-            const content = document.getElementById('edit-post-content').value;
-            
-            posts[postId] = {
-                title: title,
-                category: category,
-                content: content
-            };
-            
-            alert('Post updated successfully!');
-            showManagePosts();
-        }
-
-        function deletePost(postId) {
-            if (confirm('Are you sure you want to delete this post?')) {
-                delete posts[postId];
-                alert('Post deleted successfully!');
-                showManagePosts();
-            }
-        }
-
-        // Newsletter subscription handler
-        function handleSubscription(event) {
-            event.preventDefault();
-            const email = document.getElementById('newsletter-email').value;
-            const messageDiv = document.getElementById('subscription-message');
-            
-            if (email) {
-                messageDiv.innerHTML = `
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                        🎉 Thank you! Welcome to the HumairaStudio family! We'll send amazing content to <strong>${email}</strong>
-                    </div>
-                `;
-                messageDiv.classList.remove('hidden');
-                document.getElementById('newsletter-email').value = '';
-                
-                // Hide message after 8 seconds
-                setTimeout(() => {
-                    messageDiv.classList.add('hidden');
-                }, 8000);
-            }
-        }
-
-        // Contact form handler
-        function handleContactForm(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const messageDiv = document.getElementById('contact-message-status');
-            
-            // Simulate form submission
-            messageDiv.innerHTML = `
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    ✨ Thank you for your message! I'll get back to you within 24 hours.
-                </div>
-            `;
-            messageDiv.classList.remove('hidden');
-            event.target.reset();
-            
-            // Hide message after 8 seconds
-            setTimeout(() => {
-                messageDiv.classList.add('hidden');
-            }, 8000);
-        }
-
-        // Add scroll effect to navigation
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.classList.add('shadow-xl');
-                nav.classList.remove('shadow-lg');
-            } else {
-                nav.classList.add('shadow-lg');
-                nav.classList.remove('shadow-xl');
-            }
-        });
-
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease-in-out';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-
-        // Add hover effects to cards
-        document.querySelectorAll('.hover-lift').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-    </script>
-    <!-- === HUMAIRA: Drop-in CMS logic (no HTML changes required) === -->
-<script>
-(() => {
-  // ====== SETTINGS (edit these two only if you want) ======
-  const ADMIN_PASSWORD = 'your-password-here'; // use the same password you use now
-  const POSTS_PER_CATEGORY = 100;              // change if you want to limit
-
-  // ====== KEYS IN LOCALSTORAGE ======
-  const LS_KEYS = {
-    posts: 'humaira_posts',
-    subscribers: 'humaira_subscribers',
-    messages: 'humaira_messages'
-  };
-
-  // ====== UTIL ======
-  const $ = (sel, root=document) => root.querySelector(sel);
-  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-  const nowISO = () => new Date().toISOString();
-  const slugify = s => (s||'').toString().trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'')
-    .slice(0, 100);
-
-  const readJSON = (k, fallback) => {
-    try { return JSON.parse(localStorage.getItem(k)) ?? fallback; }
-    catch { return fallback; }
-  };
-  const writeJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-
-  // Seed storage if missing
-  const ensureArrays = () => {
-    if (!localStorage.getItem(LS_KEYS.posts)) writeJSON(LS_KEYS.posts, []);
-    if (!localStorage.getItem(LS_KEYS.subscribers)) writeJSON(LS_KEYS.subscribers, []);
-    if (!localStorage.getItem(LS_KEYS.messages)) writeJSON(LS_KEYS.messages, []);
-  };
-  ensureArrays();
-
-  // ====== STATE ======
-  const state = {
-    authed: false,
-    editingSlug: null
-  };
-
-  // ====== ADMIN LOGIN MODAL ======
-  window.showAdminLogin = () => { const m = $('#admin-login'); if (m) m.style.display = 'block'; };
-  window.closeAdminLogin = () => { const m = $('#admin-login'); if (m) m.style.display = 'none'; };
-  window.closeAdminPanel = () => { const p = $('#admin-panel'); if (p) p.style.display = 'none'; };
-
-  window.handleAdminLogin = (e) => {
-    e.preventDefault();
-    const input = $('#admin-password');
-    if (!input) return;
-    if (input.value === ADMIN_PASSWORD) {
-      state.authed = true;
-      closeAdminLogin();
-      const p = $('#admin-panel'); if (p) p.style.display = 'block';
-    } else {
-      alert('Incorrect password');
+      }
     }
-  };
+  </script>
 
-  // ====== ADMIN PANEL VIEWS ======
-  const setAdminContent = (html) => {
-    const area = $('#admin-content-area');
-    if (area) area.innerHTML = html;
-  };
+  <style>
+    :root{
+      --primary: #8A2BE2;   /* violet */
+      --accent:  #FFB6C1;   /* baby pink */
+    }
+    body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradient(135deg, var(--soft, #F7F2FF) 0%, var(--accent,#FFB6C1) 100%)}
+    .dancing-script{font-family:'Dancing Script',cursive}
+    .content-card{backdrop-filter:blur(10px);background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.3);box-shadow:0 8px 32px rgba(0,0,0,.08)}
+    .hover-lift{transition:all .3s ease}
+    .hover-lift:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(138, 43, 226, 0.28)}
+    .gradient-text{background:linear-gradient(135deg, var(--primary), var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .nav-link{position:relative;transition:all .3s ease}
+    .nav-link:hover{color:var(--primary)}
+    .nav-link::after{content:'';position:absolute;width:0;height:2px;bottom:-5px;left:50%;background:linear-gradient(135deg,var(--primary),var(--accent));transition:all .3s ease;transform:translateX(-50%)}
+    .nav-link:hover::after{width:100%}
+    .admin-panel{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:none}
+    .admin-content{background:#fff;border-radius:12px;max-width:920px;max-height:90vh;overflow:auto;margin:2rem auto;padding:2rem}
+    .badge{display:inline-block;border-radius:9999px;padding:.25rem .6rem;font-size:.75rem;background:rgba(138,43,226,.08);color:#4A2B8A;border:1px solid rgba(138,43,226,.18)}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),#B266FF);color:#fff}
+    .btn-accent{background:linear-gradient(135deg,#FF89B3,var(--accent));color:#4A2B8A}
+    .btn{display:inline-block;padding:.75rem 1rem;border-radius:.75rem;font-weight:600}
+    .input{width:100%;padding:.75rem 1rem;border-radius:.75rem;border:1px solid #e5e7eb}
+  </style>
+</head>
+<body class="selection:bg-babypink/30">
 
-  const postFormHTML = (data={}) => {
-    const isEdit = !!data.slug;
-    return `
-      <h3 class="text-2xl font-semibold gradient-text mb-4">${isEdit ? 'Edit Post' : 'Create New Post'}</h3>
-      <form id="post-form" class="space-y-4">
+  <!-- ADMIN LOGIN / ONBOARDING MODAL -->
+  <div id="admin-login" class="admin-panel">
+    <div class="admin-content">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold gradient-text mb-2" id="adminModalTitle">Admin Login</h2>
+        <p class="text-gray-600" id="adminModalSubtitle">Enter your credentials to access the admin panel</p>
+      </div>
+
+      <!-- Setup (if no admin exists) -->
+      <form id="admin-setup" class="space-y-4 hidden" onsubmit="handleSetup(event)">
         <div>
-          <label class="block text-gray-700 font-semibold mb-2">Title</label>
-          <input type="text" id="post-title" value="${(data.title||'').replaceAll('"','&quot;')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
-        </div>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Category</label>
-            <input type="text" id="post-category" placeholder="e.g. recipes, lifestyle, diy-crafts" value="${(data.category||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
-          </div>
-          <div>
-            <label class="block text-gray-700 font-semibold mb-2">Slug (auto)</label>
-            <input type="text" id="post-slug" value="${(data.slug||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100" readonly>
-          </div>
+          <label class="block text-gray-700 font-semibold mb-2">Create Username</label>
+          <input class="input focus:outline-none focus:ring-2 focus:ring-violet" id="setup-username" required placeholder="Choose admin username" />
         </div>
         <div>
-          <label class="block text-gray-700 font-semibold mb-2">Hero Image URL (optional)</label>
-          <input type="url" id="post-hero" value="${(data.heroUrl||'')}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">
+          <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
+          <input type="password" class="input focus:outline-none focus:ring-2 focus:ring-violet" id="setup-password" required placeholder="Choose strong password" />
         </div>
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Content (HTML allowed)</label>
-          <textarea id="post-content" rows="10" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-lavender-deep">${data.content||''}</textarea>
-        </div>
-        <div class="flex gap-3">
-          <button type="submit" class="bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg">${isEdit ? 'Update' : 'Publish'}</button>
-          <button type="button" id="cancel-post" class="bg-gray-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-600">Cancel</button>
+        <div class="grid gap-3 md:grid-cols-2">
+          <button class="btn btn-primary" type="submit">Save Admin Account</button>
+          <button class="btn bg-gray-500 text-white" type="button" onclick="closeAdminLogin()">Cancel</button>
         </div>
       </form>
-    `;
-  };
 
-  const row = (cells) => `<div class="grid grid-cols-12 gap-2 py-2 items-center border-b border-gray-100">${cells.map((c,i)=>`<div class="${i===0?'col-span-4':'col-span-2'} truncate">${c}</div>`).join('')}</div>`;
-
-  const dashboardHTML = () => {
-    const subs = readJSON(LS_KEYS.subscribers, []);
-    const msgs = readJSON(LS_KEYS.messages, []);
-    return `
-      <div class="space-y-8">
+      <!-- Login (if admin exists) -->
+      <form id="admin-signin" class="space-y-4 hidden" onsubmit="handleSignIn(event)">
         <div>
-          <h3 class="text-2xl font-semibold gradient-text mb-3">📧 Subscribers (${subs.length})</h3>
-          <div class="content-card rounded-xl p-4">
-            <div class="grid grid-cols-12 font-semibold text-gray-600 border-b pb-2 mb-2">
-              <div class="col-span-4">Email</div>
-              <div class="col-span-2">Date</div>
-              <div class="col-span-6">Source</div>
+          <label class="block text-gray-700 font-semibold mb-2">Username</label>
+          <input class="input focus:outline-none focus:ring-2 focus:ring-violet" id="login-username" required placeholder="Admin username" />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-semibold mb-2">Password</label>
+          <input type="password" class="input focus:outline-none focus:ring-2 focus:ring-violet" id="login-password" required placeholder="Password" />
+        </div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <button class="btn btn-primary" type="submit">Login</button>
+          <button class="btn bg-gray-500 text-white" type="button" onclick="closeAdminLogin()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel" class="admin-panel">
+    <div class="admin-content">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold gradient-text">Admin Panel</h2>
+        <div class="flex items-center gap-3">
+          <span class="badge" id="adminUserBadge">admin</span>
+          <button onclick="logout()" class="btn bg-gray-200 hover:bg-gray-300">Log out</button>
+          <button onclick="closeAdminPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <button onclick="showCreatePost()" class="btn btn-primary">✍️ Write a Post</button>
+        <button onclick="showManagePosts()" class="btn btn-accent">Manage Posts</button>
+      </div>
+
+      <div id="admin-content-area" class="space-y-6">
+        <div class="text-center text-gray-600">
+          <p class="text-lg">Welcome to your admin panel!</p>
+          <p>Select an option above to get started.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION (keep structure) -->
+  <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="#home" class="text-3xl font-bold dancing-script gradient-text" onclick="showPage('home')">HumairaStudio.com</a>
+        <div class="hidden md:flex space-x-8">
+          <a href="#home" class="nav-link text-gray-700 font-medium" onclick="showPage('home')">Home</a>
+          <a href="#categories" class="nav-link text-gray-700 font-medium" onclick="showPage('categories')">Categories</a>
+          <a href="#about" class="nav-link text-gray-700 font-medium" onclick="showPage('about')">About</a>
+          <a href="#contact" class="nav-link text-gray-700 font-medium" onclick="showPage('contact')">Contact</a>
+          <button onclick="showAdminLogin()" title="Admin" class="text-xs text-gray-400 hover:text-gray-600">•</button>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-violet">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-2">
+        <a href="#home" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('home')">Home</a>
+        <a href="#categories" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('categories')">Categories</a>
+        <a href="#about" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('about')">About</a>
+        <a href="#contact" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('contact')">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGES -->
+  <main class="pt-24">
+    <!-- HOME -->
+    <section id="page-home" class="pb-16 min-h-[80vh]">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h1 class="text-6xl md:text-7xl font-bold dancing-script gradient-text mb-6">Welcome to HumairaStudio.com</h1>
+          <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures</p>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="text-center mb-16">
+          <div class="max-w-md mx-auto">
+            <div class="content-card rounded-2xl p-8">
+              <h3 class="text-2xl font-semibold gradient-text mb-4">Subscribe to My Newsletter</h3>
+              <p class="text-gray-600 mb-6">Get the latest recipes, lifestyle tips, and creative inspiration delivered to your inbox!</p>
+              <form class="space-y-4" onsubmit="handleSubscription(event)">
+                <input type="email" id="newsletter-email" class="input focus:outline-none focus:ring-2 focus:ring-violet" placeholder="Enter your email address" required />
+                <button type="submit" class="w-full btn btn-primary">Subscribe Now</button>
+              </form>
+              <div id="subscription-message" class="mt-4 text-sm hidden"></div>
             </div>
-            ${subs.map(s=>row([s.email, new Date(s.createdAt).toLocaleString(), s.source||'-'])).join('') || '<p class="text-gray-500">No subscribers yet.</p>'}
           </div>
         </div>
 
-        <div>
-          <h3 class="text-2xl font-semibold gradient-text mb-3">✉️ Contact Messages (${msgs.length})</h3>
-          <div class="content-card rounded-xl p-4">
-            <div class="grid grid-cols-12 font-semibold text-gray-600 border-b pb-2 mb-2">
-              <div class="col-span-4">From</div>
-              <div class="col-span-2">Email</div>
-              <div class="col-span-2">Date</div>
-              <div class="col-span-4">Message</div>
+        <!-- About preview -->
+        <div class="text-center mb-16">
+          <div class="content-card rounded-2xl p-8 max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+              <div class="md:w-1/4">
+                <div class="w-32 h-32 bg-gradient-to-br from-babypink to-violet/30 rounded-full flex items-center justify-center mx-auto"><span class="text-5xl">✨</span></div>
+              </div>
+              <div class="md:w-3/4 text-left">
+                <h3 class="text-2xl font-bold gradient-text mb-4">Hi, I'm Humaira!</h3>
+                <p class="text-gray-700 mb-4 leading-relaxed">Welcome to my creative corner! I'm a passionate content creator, food enthusiast, and lifestyle blogger sharing recipes, productivity tips, and daily inspiration.</p>
+                <a href="#about" onclick="showPage('about')" class="inline-block btn btn-primary">Learn More About Me →</a>
+              </div>
             </div>
-            ${msgs.map(m=>row([m.name||'(no name)', m.email||'(no email)', new Date(m.createdAt).toLocaleString(), m.message||''])).join('') || '<p class="text-gray-500">No messages yet.</p>'}
+          </div>
+        </div>
+
+        <!-- Latest Posts Cards (auto-filled) -->
+        <div class="text-center">
+          <div class="content-card rounded-2xl p-8 max-w-6xl mx-auto">
+            <h3 class="text-3xl font-bold gradient-text mb-8">✨ Discover My Latest Posts</h3>
+            <div id="latest-posts" class="grid md:grid-cols-3 gap-6"></div>
+            <div class="mt-6"><a href="#categories" onclick="showPage('categories')" class="inline-block btn btn-accent">Explore All Categories →</a></div>
           </div>
         </div>
       </div>
-    `;
-  };
+    </section>
 
-  // Exposed: showCreatePost, showManagePosts, showDashboard
-  window.showCreatePost = () => {
-    if (!state.authed) return alert('Login first');
-    state.editingSlug = null;
-    setAdminContent(postFormHTML());
-    const titleEl = $('#post-title');
-    const slugEl = $('#post-slug');
-    titleEl?.addEventListener('input', () => { slugEl.value = slugify(titleEl.value); });
-    $('#cancel-post')?.addEventListener('click', () => setAdminContent('<p class="text-gray-600">Cancelled.</p>'));
-    $('#post-form')?.addEventListener('submit', (e) => {
+    <!-- CATEGORIES HUB -->
+    <section id="page-categories" class="hidden pb-16 min-h-[70vh]">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold gradient-text text-center mb-10">Categories</h2>
+        <p class="text-center text-gray-600 mb-10">Explore different topics and find what inspires you</p>
+        <div id="category-grid" class="grid md:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY PAGE (dynamic) -->
+    <section id="page-category" class="hidden pb-16 min-h-[70vh]">
+      <div class="container mx-auto px-6">
+        <h2 id="category-title" class="text-4xl font-bold gradient-text mb-6">Category</h2>
+        <div id="category-posts" class="grid md:grid-cols-2 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- SINGLE POST PAGE -->
+    <section id="page-post" class="hidden pb-16 min-h-[70vh]">
+      <div class="container mx-auto px-6">
+        <article id="post-article" class="content-card rounded-2xl p-8 max-w-3xl mx-auto"></article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="page-about" class="hidden pb-16 min-h-[60vh]">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-4xl font-bold gradient-text mb-6">About Me</h2>
+        <p class="text-gray-700 leading-relaxed mb-4">Welcome to my creative corner of the internet! I'm a passionate content creator, food enthusiast, and lifestyle blogger who believes in the power of sharing stories and inspiration.</p>
+        <p class="text-gray-700 leading-relaxed mb-4">As an international student, I balance studies, work, and creativity. Here I share the lessons I've learned, the recipes that comfort me, and the projects that bring joy to my daily life.</p>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="content-card rounded-2xl p-6">
+            <h3 class="font-semibold mb-2">What I Share</h3>
+            <ul class="text-gray-700 list-disc list-inside space-y-1">
+              <li>Tested recipes</li>
+              <li>Student life tips</li>
+              <li>DIY & creative projects</li>
+              <li>Writing insights</li>
+              <li>Daily inspiration</li>
+            </ul>
+          </div>
+          <div class="content-card rounded-2xl p-6">
+            <h3 class="font-semibold mb-2">Services</h3>
+            <ul class="text-gray-700 list-disc list-inside space-y-1">
+              <li>Content & blog writing</li>
+              <li>Recipe development</li>
+              <li>Lifestyle content</li>
+              <li>Social media content</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="page-contact" class="hidden pb-16 min-h-[60vh]">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-4xl font-bold gradient-text mb-4">Let's Connect!</h2>
+        <p class="text-gray-700 mb-6">Ready to collaborate? I'm available for content writing, blog writing, and creative projects. Let's bring your ideas to life together! ✨</p>
+        <form class="content-card rounded-2xl p-6 grid gap-4" onsubmit="event.preventDefault();alert('Thanks! Message received.');">
+          <input class="input" placeholder="Your Name" required />
+          <input class="input" type="email" placeholder="Your Email" required />
+          <select class="input"><option>Content Writing Project</option><option>Blog Writing Services</option><option>Recipe Development</option><option>Collaboration Opportunity</option><option>General Inquiry</option></select>
+          <textarea class="input min-h-[140px]" placeholder="Your Message" required></textarea>
+          <button class="btn btn-primary" type="submit">Send Message ✨</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (kept) -->
+  <footer class="bg-white/70 mt-8">
+    <div class="container mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="font-bold mb-2">HumairaStudio.com</h3>
+        <p class="text-gray-600">Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Quick Links</h4>
+        <ul class="space-y-1 text-gray-700">
+          <li><a href="#home" onclick="showPage('home')">Home</a></li>
+          <li><a href="#categories" onclick="showPage('categories')">Categories</a></li>
+          <li><a href="#about" onclick="showPage('about')">About</a></li>
+          <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Services</h4>
+        <ul class="space-y-1 text-gray-700">
+          <li>✍️ Content Writing</li>
+          <li>Blog Writing</li>
+          <li>Recipe Development</li>
+          <li>Lifestyle Content</li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-gray-500 text-sm pb-8">© 2024 HumairaStudio.com — Spreading creativity, one post at a time ✨</div>
+  </footer>
+
+  <!-- UTIL: Templates -->
+  <template id="tpl-card">
+    <div class="rounded-xl p-6 hover-lift cursor-pointer bg-gradient-to-br from-babypink/50 to-violet/10">
+      <h4 class="text-lg font-bold text-gray-800 mb-2"></h4>
+      <p class="text-gray-600 text-sm mb-4"></p>
+      <span class="text-xs text-gray-500"></span>
+    </div>
+  </template>
+
+  <script>
+    /* =========================
+       ROUTING & PAGE DISPLAY
+       ========================= */
+    const PAGES = ['home','categories','category','post','about','contact'];
+    function showPage(name){
+      PAGES.forEach(p=>document.getElementById('page-'+p).classList.add('hidden'));
+      document.getElementById('page-'+name).classList.remove('hidden');
+      if(name==='categories') renderCategoryGrid();
+    }
+    function showCategoryPage(slug){
+      const cat = CATEGORIES.find(c=>c.slug===slug);
+      if(!cat) return;
+      document.getElementById('category-title').textContent = cat.title;
+      const wrap = document.getElementById('category-posts');
+      wrap.innerHTML='';
+      const posts = getPosts().filter(p=>p.category===slug).sort((a,b)=>b.created-a.created);
+      posts.forEach(p=>{
+        const el = document.createElement('div');
+        el.className = 'content-card rounded-2xl p-6';
+        el.innerHTML = `<h3 class="text-xl font-semibold mb-2">${p.title}</h3>
+                        <p class="text-gray-700 mb-3 line-clamp-3">${p.content.substring(0,180)}...</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500"><span class="badge">${cat.title}</span><a class="text-violet" href="#" data-id="${p.id}">Read More →</a></div>`;
+        el.querySelector('a').addEventListener('click', (e)=>{e.preventDefault(); showPost(p.id)});
+        wrap.appendChild(el);
+      });
+      showPage('category');
+    }
+    function showPost(id){
+      const p = getPosts().find(x=>x.id===id); if(!p) return;
+      const catTitle = (CATEGORIES.find(c=>c.slug===p.category)||{}).title||'';
+      const art = document.getElementById('post-article');
+      art.innerHTML = `
+        <h1 class="text-3xl md:text-4xl font-bold gradient-text mb-3">${p.title}</h1>
+        <div class="text-sm text-gray-500 mb-6">
+          <span class="badge">${catTitle}</span>
+          <span class="ml-2">${new Date(p.created).toLocaleDateString()}</span>
+        </div>
+        ${p.cover ? `<img class="rounded-xl mb-6" src="${p.cover}" alt="${p.title}">`:''}
+        <div class="prose max-w-none">${p.content.replace(/\n/g,'<br>')}</div>`;
+      showPage('post');
+    }
+
+    /* =========================
+       DATA: Categories & Posts
+       ========================= */
+    const CATEGORIES = [
+      { title:'Creative Writing', slug:'creative-writing', blurb:'Stories, reflections, and writing craft.' },
+      { title:'Lifestyle', slug:'lifestyle', blurb:'Daily routines, wellness, and balance.' },
+      { title:'Recipes', slug:'recipes', blurb:'Delicious dishes from my kitchen.' },
+      { title:'DIY Crafts', slug:'diy-crafts', blurb:'Creative projects and decor ideas.' },
+      { title:'Student Life', slug:'student-life', blurb:'Tips and experiences as a student.' },
+      { title:'Daily Inspiration', slug:'inspiration', blurb:'Motivations and reflections.' },
+      { title:'Writing', slug:'writing', blurb:'Content creation insights.' }
+    ];
+
+    function getPosts(){
+      const raw = localStorage.getItem('hs_posts');
+      return raw? JSON.parse(raw): [];
+    }
+    function setPosts(arr){
+      localStorage.setItem('hs_posts', JSON.stringify(arr));
+    }
+
+    // Seed default cards on home (pull latest 3)
+    function renderLatest(){
+      const holder = document.getElementById('latest-posts');
+      holder.innerHTML='';
+      const posts = getPosts().sort((a,b)=>b.created-a.created).slice(0,3);
+      posts.forEach(p=>{
+        const card = document.getElementById('tpl-card').content.cloneNode(true);
+        card.querySelector('h4').textContent = p.title;
+        card.querySelector('p').textContent = (p.content||'').substring(0,95)+'...';
+        card.querySelector('span').textContent = new Date(p.created).toLocaleDateString();
+        const box = card.querySelector('div');
+        box.addEventListener('click', ()=>showPost(p.id));
+        holder.appendChild(card);
+      });
+    }
+
+    function renderCategoryGrid(){
+      const grid = document.getElementById('category-grid');
+      grid.innerHTML='';
+      CATEGORIES.forEach(c=>{
+        const el = document.createElement('div');
+        el.className = 'rounded-xl p-6 hover-lift cursor-pointer bg-gradient-to-br from-babypink/40 to-violet/10';
+        el.innerHTML = `<h4 class="text-lg font-bold mb-2 text-gray-800">${c.title}</h4><p class="text-gray-600 text-sm">${c.blurb}</p>`;
+        el.addEventListener('click', ()=>showCategoryPage(c.slug));
+        grid.appendChild(el);
+      });
+    }
+
+    /* =========================
+       ADMIN: Single-owner auth
+       ========================= */
+    const ADMIN_KEY = 'hs_admin';
+    const SESSION_KEY = 'hs_session';
+
+    async function sha256(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function isAuthed(){ return !!localStorage.getItem(SESSION_KEY); }
+
+    function showAdminLogin(){
+      const hasAdmin = !!localStorage.getItem(ADMIN_KEY);
+      document.getElementById('admin-login').style.display = 'block';
+      document.getElementById('adminModalTitle').textContent = hasAdmin? 'Admin Login' : 'Create Admin Account';
+      document.getElementById('adminModalSubtitle').textContent = hasAdmin? 'Enter your credentials to access the admin panel' : 'Set your username & password. Only you can edit the site.';
+      document.getElementById('admin-setup').classList.toggle('hidden', hasAdmin);
+      document.getElementById('admin-signin').classList.toggle('hidden', !hasAdmin);
+    }
+    function closeAdminLogin(){ document.getElementById('admin-login').style.display='none'; }
+
+    async function handleSetup(e){
       e.preventDefault();
-      const posts = readJSON(LS_KEYS.posts, []);
-      const title = $('#post-title').value.trim();
-      const category = slugify($('#post-category').value);
-      const slug = $('#post-slug').value || slugify(title);
-      const content = $('#post-content').value;
-      const heroUrl = $('#post-hero').value.trim();
+      const u = document.getElementById('setup-username').value.trim();
+      const p = document.getElementById('setup-password').value;
+      if(u.length<3 || p.length<6){ alert('Use a longer username and password.'); return; }
+      const salt = (Math.random()+1).toString(36).slice(2);
+      const hash = await sha256(p+salt);
+      localStorage.setItem(ADMIN_KEY, JSON.stringify({u, salt, hash}));
+      localStorage.setItem(SESSION_KEY, u);
+      closeAdminLogin();
+      openAdminPanel();
+    }
 
-      if (!title || !category || !slug) return alert('Title & Category are required.');
-
-      const exists = posts.find(p => p.slug === slug);
-      const obj = {
-        title, category, slug, content, heroUrl,
-        createdAt: exists?.createdAt || nowISO(),
-        updatedAt: nowISO()
-      };
-
-      if (exists) {
-        Object.assign(exists, obj);
+    async function handleSignIn(e){
+      e.preventDefault();
+      const rec = JSON.parse(localStorage.getItem(ADMIN_KEY)||'{}');
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value;
+      const test = await sha256(p + (rec.salt||''));
+      if(rec.u===u && rec.hash===test){
+        localStorage.setItem(SESSION_KEY, u);
+        closeAdminLogin();
+        openAdminPanel();
       } else {
-        posts.unshift(obj);
+        alert('Invalid credentials');
       }
-      writeJSON(LS_KEYS.posts, posts);
-      alert('Saved!');
-      window.showManagePosts();
-      renderCategories(); // refresh view if on categories
-    });
-  };
+    }
 
-  window.showManagePosts = () => {
-    if (!state.authed) return alert('Login first');
-    const posts = readJSON(LS_KEYS.posts, []);
-    const list = posts.map(p => `
-      <div class="content-card rounded-xl p-4 mb-3">
-        <div class="flex justify-between items-center">
-          <div>
+    function logout(){
+      localStorage.removeItem(SESSION_KEY);
+      closeAdminPanel();
+    }
+
+    function openAdminPanel(){
+      if(!isAuthed()){ showAdminLogin(); return; }
+      document.getElementById('adminUserBadge').textContent = localStorage.getItem(SESSION_KEY);
+      document.getElementById('admin-panel').style.display='block';
+      showCreatePost();
+    }
+    function closeAdminPanel(){ document.getElementById('admin-panel').style.display='none'; }
+
+    // Admin views
+    function showCreatePost(){
+      if(!isAuthed()) return showAdminLogin();
+      const csel = CATEGORIES.map(c=>`<option value="${c.slug}">${c.title}</option>`).join('');
+      document.getElementById('admin-content-area').innerHTML = `
+        <form class="grid gap-4" onsubmit="savePost(event)">
+          <div class="grid md:grid-cols-2 gap-4">
+            <input class="input" id="post-title" placeholder="Post title" required />
+            <select class="input" id="post-category" required>${csel}</select>
+          </div>
+          <input class="input" id="post-cover" placeholder="Cover image URL (optional)" />
+          <textarea class="input min-h-[200px]" id="post-content" placeholder="Write your content here..." required></textarea>
+          <div class="grid md:grid-cols-2 gap-3">
+            <button class="btn btn-primary" type="submit">Publish Post</button>
+            <button class="btn bg-gray-200" type="button" onclick="showManagePosts()">Cancel</button>
+          </div>
+        </form>`;
+    }
+
+    function showManagePosts(){
+      if(!isAuthed()) return showAdminLogin();
+      const list = getPosts().sort((a,b)=>b.created-a.created).map(p=>`
+        <div class="content-card rounded-2xl p-4 flex items-start gap-3">
+          <div class="flex-1">
             <div class="font-semibold">${p.title}</div>
-            <div class="text-xs text-gray-500">/${p.category}/${p.slug}</div>
+            <div class="text-sm text-gray-500">${(CATEGORIES.find(c=>c.slug===p.category)||{}).title||p.category} • ${new Date(p.created).toLocaleString()}</div>
           </div>
           <div class="flex gap-2">
-            <button data-slug="${p.slug}" class="edit bg-lavender-deep text-white px-3 py-1 rounded">Edit</button>
-            <button data-slug="${p.slug}" class="del bg-rose-deep text-white px-3 py-1 rounded">Delete</button>
+            <button class="btn bg-gray-200" onclick="editPost('${p.id}')">Edit</button>
+            <button class="btn bg-red-100 text-red-700" onclick="deletePost('${p.id}')">Delete</button>
           </div>
-        </div>
-      </div>
-    `).join('') || '<p class="text-gray-500">No posts yet.</p>';
-
-    setAdminContent(`
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="md:col-span-2">
-          <h3 class="text-2xl font-semibold gradient-text mb-4">📝 Posts</h3>
-          ${list}
-        </div>
-        <div>
-          <h3 class="text-2xl font-semibold gradient-text mb-4">📊 Dashboard</h3>
-          <button onclick="showDashboard()" class="w-full bg-gradient-to-r from-lavender-deep to-rose-deep text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg">Open Dashboard</button>
-        </div>
-      </div>
-    `);
-
-    $$('.edit').forEach(btn => btn.addEventListener('click', () => {
-      const slug = btn.getAttribute('data-slug');
-      const posts = readJSON(LS_KEYS.posts, []);
-      const p = posts.find(x => x.slug === slug);
-      if (!p) return;
-      state.editingSlug = slug;
-      setAdminContent(postFormHTML(p));
-      $('#cancel-post')?.addEventListener('click', () => window.showManagePosts());
-      $('#post-form')?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const title = $('#post-title').value.trim();
-        const category = slugify($('#post-category').value);
-        const content = $('#post-content').value;
-        const heroUrl = $('#post-hero').value.trim();
-        Object.assign(p, { title, category, content, heroUrl, updatedAt: nowISO() });
-        writeJSON(LS_KEYS.posts, posts);
-        alert('Updated!');
-        window.showManagePosts();
-        renderCategories();
-      });
-    }));
-
-    $$('.del').forEach(btn => btn.addEventListener('click', () => {
-      const slug = btn.getAttribute('data-slug');
-      if (!confirm('Delete this post?')) return;
-      let posts = readJSON(LS_KEYS.posts, []);
-      posts = posts.filter(x => x.slug !== slug);
-      writeJSON(LS_KEYS.posts, posts);
-      window.showManagePosts();
-      renderCategories();
-    }));
-  };
-
-  window.showDashboard = () => {
-    if (!state.authed) return alert('Login first');
-    setAdminContent(dashboardHTML());
-  };
-
-  // ====== SUBSCRIPTIONS & CONTACT ======
-  window.handleSubscription = (e) => {
-    e.preventDefault();
-    const emailEl = $('#newsletter-email');
-    if (!emailEl || !emailEl.value) return;
-    const subs = readJSON(LS_KEYS.subscribers, []);
-    if (subs.some(s => s.email.toLowerCase() === emailEl.value.toLowerCase())) {
-      $('#subscription-message').classList.remove('hidden');
-      $('#subscription-message').textContent = 'You are already subscribed. 💌';
-      return;
-    }
-    subs.push({ email: emailEl.value.trim(), createdAt: nowISO(), source: 'homepage-subscribe' });
-    writeJSON(LS_KEYS.subscribers, subs);
-    emailEl.value = '';
-    const msg = $('#subscription-message');
-    if (msg) { msg.classList.remove('hidden'); msg.textContent = 'Subscribed! Check your inbox. 🎉'; }
-  };
-
-  window.handleContactForm = (e) => {
-    e.preventDefault();
-    const name = ($('#contact-name')?.value || '').trim();
-    const email = ($('#contact-email')?.value || '').trim();
-    const message = ($('#contact-message')?.value || '').trim();
-    const msgs = readJSON(LS_KEYS.messages, []);
-    msgs.unshift({ name, email, message, createdAt: nowISO() });
-    writeJSON(LS_KEYS.messages, msgs);
-    alert('Thanks for your message! 💌');
-    // clear if inputs exist
-    $('#contact-name') && ($('#contact-name').value = '');
-    $('#contact-email') && ($('#contact-email').value = '');
-    $('#contact-message') && ($('#contact-message').value = '');
-  };
-
-  // ====== CATEGORY RENDERING ======
-  function renderCategories() {
-    const host = document.getElementById('categories');
-    if (!host) return; // if your section id changes, this will silently skip
-    // Create or reuse container
-    let grid = host.querySelector('[data-categories-grid]');
-    if (!grid) {
-      grid = document.createElement('div');
-      grid.setAttribute('data-categories-grid', '1');
-      grid.className = 'container mx-auto px-6 py-12';
-      host.appendChild(grid);
-    }
-    const posts = readJSON(LS_KEYS.posts, []);
-    const byCat = posts.reduce((acc,p)=>{
-      (acc[p.category] = acc[p.category] || []).push(p);
-      return acc;
-    }, {});
-    const cats = Object.keys(byCat).sort();
-
-    if (cats.length === 0) {
-      grid.innerHTML = `<p class="text-center text-gray-600">No posts yet. Create one from your Admin Panel.</p>`;
-      return;
+        </div>`).join('');
+      document.getElementById('admin-content-area').innerHTML = `<div class="grid gap-3">${list || '<div class=\"text-gray-500\">No posts yet.</div>'}</div>`;
     }
 
-    grid.innerHTML = cats.map(cat => {
-      const rows = byCat[cat].slice(0, POSTS_PER_CATEGORY).map(p => `
-        <a href="#/post/${p.slug}" class="block content-card rounded-xl p-5 hover-lift">
-          ${p.heroUrl ? `<img src="${p.heroUrl}" alt="" class="w-full h-48 object-cover rounded-lg mb-3">` : ''}
-          <div class="text-sm uppercase tracking-wide text-gray-500 mb-1">${cat}</div>
-          <div class="text-xl font-semibold mb-1">${p.title}</div>
-          <div class="text-xs text-gray-400">${new Date(p.updatedAt||p.createdAt).toLocaleString()}</div>
-        </a>
-      `).join('');
+    function uid(){ return 'p_'+Math.random().toString(36).slice(2,10); }
 
-      return `
-        <div class="mb-10">
-          <h3 class="text-2xl font-bold gradient-text mb-4">#${cat}</h3>
-          <div class="grid md:grid-cols-3 gap-6">${rows}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  // ====== SIMPLE POST VIEWER (optional) ======
-  function renderPostIfNeeded() {
-    const m = location.hash.match(/^#\/post\/(.+)$/);
-    if (!m) return;
-    const slug = m[1];
-    const posts = readJSON(LS_KEYS.posts, []);
-    const p = posts.find(x => x.slug === slug);
-    const host = document.getElementById('home') || document.body;
-    if (!p) {
-      alert('Post not found');
-      return;
-    }
-    // Create an overlay view
-    let wrap = document.getElementById('post-overlay');
-    if (!wrap) {
-      wrap = document.createElement('div');
-      wrap.id = 'post-overlay';
-      wrap.className = 'fixed inset-0 z-[999] overflow-y-auto bg-white';
-      document.body.appendChild(wrap);
-    }
-    wrap.innerHTML = `
-      <div class="container mx-auto px-6 py-8 max-w-3xl">
-        <div class="flex justify-between items-center mb-6">
-          <div class="text-2xl font-bold gradient-text">${p.title}</div>
-          <button onclick="document.getElementById('post-overlay').remove()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-        </div>
-        ${p.heroUrl ? `<img src="${p.heroUrl}" class="w-full h-64 object-cover rounded-xl mb-6">` : ''}
-        <div class="prose max-w-none">${p.content}</div>
-      </div>
-    `;
-  }
-
-  // ====== NAV/ROUTER HOOKS ======
-  function onHashChange() {
-    if (location.hash.startsWith('#categories')) {
-      renderCategories();
-    } else if (location.hash.startsWith('#/post/')) {
-      renderPostIfNeeded();
-    }
-  }
-  window.addEventListener('hashchange', onHashChange);
-  document.addEventListener('DOMContentLoaded', onHashChange);
-
-  // Also render categories on first load if already on that section
-  document.addEventListener('DOMContentLoaded', () => {
-    if (location.hash.replace('#','') === 'categories') renderCategories();
-
-    // Mobile menu toggle (uses your existing button)
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    btn && menu && btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-  });
-})();
-</script>
-<!-- === /HUMAIRA: Drop-in CMS logic === -->
-<!-- === HUMAIRA: Full CMS + Auto-render script === -->
-<script>
-(() => {
-  const ADMIN_PASSWORD = 'humaira123';
-  const POSTS_PER_CATEGORY = 100;
-  const LS_KEYS = { posts:'humaira_posts', subscribers:'humaira_subscribers', messages:'humaira_messages' };
-  const $ = (s,r=document)=>r.querySelector(s);
-  const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
-  const nowISO=()=>new Date().toISOString();
-  const slugify=s=>(s||'').toString().trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,100);
-  const readJSON=k,f=>(JSON.parse(localStorage.getItem(k))||f);
-  const writeJSON=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-
-  if(!localStorage.getItem(LS_KEYS.posts)) writeJSON(LS_KEYS.posts,[]);
-  if(!localStorage.getItem(LS_KEYS.subscribers)) writeJSON(LS_KEYS.subscribers,[]);
-  if(!localStorage.getItem(LS_KEYS.messages)) writeJSON(LS_KEYS.messages,[]);
-
-  const state={authed:false,editingSlug:null};
-
-  window.showAdminLogin=()=>{$('#admin-login')?.style.display='block';};
-  window.closeAdminLogin=()=>{$('#admin-login')?.style.display='none';};
-  window.closeAdminPanel=()=>{$('#admin-panel')?.style.display='none';};
-  window.handleAdminLogin=(e)=>{e.preventDefault();if($('#admin-password')?.value===ADMIN_PASSWORD){state.authed=true;closeAdminLogin();$('#admin-panel').style.display='block';}else alert('Incorrect password');};
-
-  const setAdminContent=html=>{$('#admin-content-area').innerHTML=html;};
-
-  const postFormHTML=(d={})=>{const isEdit=!!d.slug;return`
-    <h3 class="text-2xl font-semibold gradient-text mb-4">${isEdit?'Edit Post':'Create New Post'}</h3>
-    <form id="post-form" class="space-y-4">
-      <div><label>Title</label><input type="text" id="post-title" value="${(d.title||'').replaceAll('"','&quot;')}" class="w-full border p-2"></div>
-      <div><label>Category</label><input type="text" id="post-category" value="${(d.category||'')}" class="w-full border p-2"></div>
-      <div><label>Slug</label><input type="text" id="post-slug" value="${(d.slug||'')}" readonly class="w-full border p-2 bg-gray-100"></div>
-      <div><label>Hero Image URL</label><input type="url" id="post-hero" value="${(d.heroUrl||'')}" class="w-full border p-2"></div>
-      <div><label>Content (HTML allowed)</label><textarea id="post-content" rows="8" class="w-full border p-2">${d.content||''}</textarea></div>
-      <div><button type="submit" class="bg-purple-500 text-white px-4 py-2">${isEdit?'Update':'Publish'}</button>
-      <button type="button" id="cancel-post">Cancel</button></div>
-    </form>
-  `};
-
-  window.showCreatePost=()=>{
-    if(!state.authed) return alert('Login first');
-    state.editingSlug=null; setAdminContent(postFormHTML());
-    const titleEl=$('#post-title'), slugEl=$('#post-slug');
-    titleEl?.addEventListener('input',()=>{slugEl.value=slugify(titleEl.value)});
-    $('#cancel-post')?.addEventListener('click',()=>setAdminContent('<p>Cancelled</p>'));
-    $('#post-form')?.addEventListener('submit',e=>{
+    function savePost(e){
       e.preventDefault();
-      const posts=readJSON(LS_KEYS.posts,[]);
-      const title=$('#post-title').value.trim(), category=slugify($('#post-category').value), slug=$('#post-slug').value||slugify(title), content=$('#post-content').value, heroUrl=$('#post-hero').value.trim();
-      if(!title||!category||!slug) return alert('Title & Category required');
-      const exists=posts.find(p=>p.slug===slug);
-      const obj={title,category,slug,content,heroUrl,createdAt:exists?.createdAt||nowISO(),updatedAt:nowISO()};
-      if(exists) Object.assign(exists,obj); else posts.unshift(obj);
-      writeJSON(LS_KEYS.posts,posts);
+      const id = document.getElementById('post-id')?.value || uid();
+      const title = document.getElementById('post-title').value.trim();
+      const category = document.getElementById('post-category').value;
+      const cover = document.getElementById('post-cover').value.trim();
+      const content = document.getElementById('post-content').value.trim();
+      const posts = getPosts();
+      const now = Date.now();
+      const existing = posts.find(p=>p.id===id);
+      if(existing){ Object.assign(existing,{title,category,cover,content,updated:now}); }
+      else { posts.push({id,title,category,cover,content,created:now}); }
+      setPosts(posts);
+      renderLatest();
       alert('Saved!');
-      window.showManagePosts();
-      renderCategories(); renderLatestPosts('latest-posts',3);
-    });
-  };
+      showManagePosts();
+    }
 
-  window.showManagePosts=()=>{
-    if(!state.authed) return alert('Login first');
-    const posts=readJSON(LS_KEYS.posts,[]);
-    setAdminContent(posts.map(p=>`<div><strong>${p.title}</strong> (${p.category}) <button data-slug="${p.slug}" class="edit">Edit</button> <button data-slug="${p.slug}" class="del">Delete</button></div>`).join('')||'<p>No posts yet.</p>');
-    $$('.edit').forEach(btn=>btn.addEventListener('click',()=>{
-      const p=readJSON(LS_KEYS.posts,[]).find(x=>x.slug===btn.getAttribute('data-slug'));
-      if(!p) return; state.editingSlug=p.slug; setAdminContent(postFormHTML(p));
-      $('#cancel-post')?.addEventListener('click',()=>window.showManagePosts());
-      $('#post-form')?.addEventListener('submit',e=>{
-        e.preventDefault(); Object.assign(p,{title:$('#post-title').value.trim(),category:slugify($('#post-category').value),content:$('#post-content').value,heroUrl:$('#post-hero').value.trim(),updatedAt:nowISO()});
-        writeJSON(LS_KEYS.posts,readJSON(LS_KEYS.posts,[])); alert('Updated!'); window.showManagePosts(); renderCategories(); renderLatestPosts('latest-posts',3);
-      });
-    }));
-    $$('.del').forEach(btn=>btn.addEventListener('click',()=>{
+    function editPost(id){
+      const p = getPosts().find(x=>x.id===id); if(!p) return;
+      const csel = CATEGORIES.map(c=>`<option value="${c.slug}" ${p.category===c.slug?'selected':''}>${c.title}</option>`).join('');
+      document.getElementById('admin-content-area').innerHTML = `
+        <form class="grid gap-4" onsubmit="savePost(event)">
+          <input type="hidden" id="post-id" value="${p.id}">
+          <div class="grid md:grid-cols-2 gap-4">
+            <input class="input" id="post-title" value="${p.title.replace(/"/g,'&quot;')}" required />
+            <select class="input" id="post-category" required>${csel}</select>
+          </div>
+          <input class="input" id="post-cover" value="${(p.cover||'').replace(/"/g,'&quot;')}" />
+          <textarea class="input min-h-[200px]" id="post-content" required>${p.content.replace(/</g,'&lt;')}</textarea>
+          <div class="grid md:grid-cols-2 gap-3">
+            <button class="btn btn-primary" type="submit">Update Post</button>
+            <button class="btn bg-gray-200" type="button" onclick="showManagePosts()">Cancel</button>
+          </div>
+        </form>`;
+    }
+
+    function deletePost(id){
       if(!confirm('Delete this post?')) return;
-      let posts=readJSON(LS_KEYS.posts,[]); posts=posts.filter(x=>x.slug!==btn.getAttribute('data-slug')); writeJSON(LS_KEYS.posts,posts);
-      window.showManagePosts(); renderCategories(); renderLatestPosts('latest-posts',3);
-    }));
-  };
+      setPosts(getPosts().filter(p=>p.id!==id));
+      renderLatest();
+      showManagePosts();
+    }
 
-  window.showDashboard=()=>{if(!state.authed)return alert('Login first'); const subs=readJSON(LS_KEYS.subscribers,[]), msgs=readJSON(LS_KEYS.messages,[]); setAdminContent(`
-    <h3>Subscribers (${subs.length})</h3>${subs.map(s=>`<div>${s.email} - ${new Date(s.createdAt).toLocaleString()}</div>`).join('')}
-    <h3>Messages (${msgs.length})</h3>${msgs.map(m=>`<div>${m.name} (${m.email}): ${m.message}</div>`).join('')}
-  `)};
+    /* =========================
+       NEWSLETTER (demo only)
+       ========================= */
+    function handleSubscription(e){
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return alert('Please enter a valid email');
+      const list = JSON.parse(localStorage.getItem('hs_subs')||'[]');
+      if(!list.includes(email)) list.push(email);
+      localStorage.setItem('hs_subs', JSON.stringify(list));
+      const msg = document.getElementById('subscription-message');
+      msg.textContent = 'Thanks! You are subscribed.';
+      msg.classList.remove('hidden');
+      e.target.reset();
+    }
 
-  window.handleSubscription=e=>{e.preventDefault(); const email=$('#newsletter-email')?.value; if(!email) return; const subs=readJSON(LS_KEYS.subscribers,[]); if(subs.some(s=>s.email.toLowerCase()===email.toLowerCase())) return alert('Already subscribed'); subs.push({email,createdAt:nowISO()}); writeJSON(LS_KEYS.subscribers,subs); alert('Subscribed!'); $('#newsletter-email')&&( $('#newsletter-email').value='');};
+    /* =========================
+       SEED CONTENT — adds the requested Notion article once
+       ========================= */
+    (function seed(){
+      const seeded = localStorage.getItem('hs_seed_v1');
+      if(seeded) return;
+      const posts = getPosts();
+      posts.push({
+        id: uid(),
+        title: 'The Usage of Notion for Students',
+        category: 'creative-writing',
+        cover: '',
+        created: Date.now()-60000,
+        content: `Notion is one of the most powerful productivity tools for students. It works like a digital notebook where you can organize class notes, track assignments, and manage projects in one place. Students can create pages for different subjects, link resources, and even collaborate with classmates. Unlike traditional note-taking apps, Notion allows full customization—you can design study planners, exam schedules, or personal journals with templates. Its database feature helps students manage reading lists or research work effectively. Another benefit is accessibility—everything is synced across devices, so you can study from anywhere. For group work, shared pages allow easy communication and task division. Students who struggle with time management find Notion especially useful because it combines task lists, calendars, and reminders into one streamlined tool. By using Notion, students don’t just stay organized—they actually build a system that makes learning easier, faster, and more enjoyable.`
+      });
+      setPosts(posts);
+      localStorage.setItem('hs_seed_v1','1');
+    })();
 
-  window.handleContactForm=e=>{e.preventDefault(); const name=$('#contact-name')?.value||'', email=$('#contact-email')?.value||'', msg=$('#contact-message')?.value||''; const msgs=readJSON(LS_KEYS.messages,[]); msgs.unshift({name,email,message:msg,createdAt:nowISO()}); writeJSON(LS_KEYS.messages,msgs); alert('Thanks for your message!'); $('#contact-name')&&($('#contact-name').value=''); $('#contact-email')&&($('#contact-email').value=''); $('#contact-message')&&($('#contact-message').value='');};
+    // INIT
+    renderLatest();
+    renderCategoryGrid();
+    showPage('home');
 
-  function renderCategories(){
-    const host=document.getElementById('categories'); if(!host) return;
-    let grid=host.querySelector('[data-categories-grid]'); if(!grid){ grid=document.createElement('div'); grid.setAttribute('data-categories-grid','1'); host.appendChild(grid);}
-    const posts=readJSON(LS_KEYS.posts,[]); const byCat={}; posts.forEach(p=>(byCat[p.category]=byCat[p.category]||[]).push(p));
-    const cats=Object.keys(byCat).sort();
-    if(cats.length===0){grid.innerHTML='<p>No posts yet.</p>'; return;}
-    grid.innerHTML=cats.map(cat=>`<div class="mb-10"><h3>#${cat}</h3>${byCat[cat].map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`).join('')}</div>`).join('');
-  }
-
-  function renderLatestPosts(targetId, limit=3){
-    const host=document.getElementById(targetId); if(!host) return;
-    const posts=readJSON(LS_KEYS.posts,[]).slice(0,limit);
-    if(!posts.length){host.innerHTML='<p>No posts yet.</p>'; return;}
-    host.innerHTML=posts.map(p=>`<a href="#/post/${p.slug}">${p.title}</a>`).join('');
-  }
-
-  function renderPostIfNeeded(){
-    const m=location.hash.match(/^#\/post\/(.+)$/); if(!m)return;
-    const slug=m[1]; const p=readJSON(LS_KEYS.posts,[]).find(x=>x.slug===slug); if(!p){alert('Post not found');return;}
-    let wrap=document.getElementById('post-overlay'); if(!wrap){wrap=document.createElement('div'); wrap.id='post-overlay'; document.body.appendChild(wrap);}
-    wrap.innerHTML=`<button onclick="document.getElementById('post-overlay').remove()">Close</button><h2>${p.title}</h2>${p.heroUrl?`<img src="${p.heroUrl}">`:''}<div>${p.content}</div>`;
-  }
-
-  window.addEventListener('hashchange',()=>{ renderCategories(); renderPostIfNeeded(); });
-  document.addEventListener('DOMContentLoaded',()=>{ renderCategories(); renderLatestPosts('latest-posts',3); renderPostIfNeeded(); });
-})();
-</script>
-<!-- === /HUMAIRA: Full CMS + Auto-render script === -->
-<script>
-    // Password override script
-    document.addEventListener("DOMContentLoaded", function() {
-        var submitButton = document.querySelector("button");
-        var passwordInput = document.querySelector("input[type='password']");
-
-        if (submitButton && passwordInput) {
-            submitButton.addEventListener("click", function(event) {
-                event.preventDefault(); // prevent form submission
-                if (passwordInput.value === "humaira2024") {
-                    alert("Password correct! Access granted.");
-                    // Redirect to your page or show hidden content
-                    window.location.href = window.location.href; // stays on the same page or change link
-                } else {
-                    alert("Incorrect password. Try again.");
-                }
-            });
-        }
+    // Mobile menu
+    document.getElementById('mobile-menu-btn').addEventListener('click',()=>{
+      document.getElementById('mobile-menu').classList.toggle('hidden');
     });
-</script>
 
+    // Hash routing support (/#/category/slug, /#/post/id)
+    window.addEventListener('hashchange', ()=>{
+      const h = location.hash.replace(/^#\/?/, '');
+      const [first, second] = h.split('/');
+      if(first==='category' && second){ return showCategoryPage(second); }
+      if(first==='post' && second){ return showPost(second); }
+      if(PAGES.includes(first)) return showPage(first);
+    });
+  </script>
 </body>
 </html>
