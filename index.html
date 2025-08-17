@@ -1,33 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HumairaStudio.com - Creative Blog & Lifestyle</title>
-  <meta name="description" content="HumairaStudio.com - Your go-to destination for creative arts, delicious recipes, lifestyle tips, and daily inspiration by Humaira." />
-  <meta name="keywords" content="HumairaStudio, blog, arts crafts, recipes, lifestyle, creative, DIY, Humaira, content writing" />
-  <meta name="author" content="Humaira" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HumairaStudio — Creative Blog</title>
 
-  <!-- FONTS (keep same as original) -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind (same CDN approach as original) -->
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            // UPDATED THEME ONLY — everything else remains same
-            violet: '#8A2BE2',              // primary
-            babypink: '#FFB6C1',            // accent
-            // carry original palette names but mapped to new colors to keep classes intact
-            'soft-lavender': '#E9D8FF',
-            'rose-blush': '#FFE0EA',
-            'lavender-deep': '#8A2BE2',     // replaces previous purple
-            'rose-deep': '#FF7FA1',
-            'lavender-light': '#F7F2FF',
-            'rose-light': '#FFF2F7'
+            violet: '#8A2BE2',
+            babypink: '#FFB6C1'
           }
         }
       }
@@ -36,574 +25,668 @@
 
   <style>
     :root{
-      --primary: #8A2BE2;   /* violet */
-      --accent:  #FFB6C1;   /* baby pink */
+      --primary:#8A2BE2;
+      --accent:#FFB6C1;
     }
-    body{font-family:'Poppins',sans-serif;min-height:100vh;background:linear-gradient(135deg, var(--soft, #F7F2FF) 0%, var(--accent,#FFB6C1) 100%)}
-    .dancing-script{font-family:'Dancing Script',cursive}
-    .content-card{backdrop-filter:blur(10px);background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.3);box-shadow:0 8px 32px rgba(0,0,0,.08)}
-    .hover-lift{transition:all .3s ease}
-    .hover-lift:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(138, 43, 226, 0.28)}
-    .gradient-text{background:linear-gradient(135deg, var(--primary), var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .nav-link{position:relative;transition:all .3s ease}
-    .nav-link:hover{color:var(--primary)}
-    .nav-link::after{content:'';position:absolute;width:0;height:2px;bottom:-5px;left:50%;background:linear-gradient(135deg,var(--primary),var(--accent));transition:all .3s ease;transform:translateX(-50%)}
-    .nav-link:hover::after{width:100%}
-    .admin-panel{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:none}
-    .admin-content{background:#fff;border-radius:12px;max-width:920px;max-height:90vh;overflow:auto;margin:2rem auto;padding:2rem}
-    .badge{display:inline-block;border-radius:9999px;padding:.25rem .6rem;font-size:.75rem;background:rgba(138,43,226,.08);color:#4A2B8A;border:1px solid rgba(138,43,226,.18)}
-    .btn-primary{background:linear-gradient(135deg,var(--primary),#B266FF);color:#fff}
-    .btn-accent{background:linear-gradient(135deg,#FF89B3,var(--accent));color:#4A2B8A}
-    .btn{display:inline-block;padding:.75rem 1rem;border-radius:.75rem;font-weight:600}
-    .input{width:100%;padding:.75rem 1rem;border-radius:.75rem;border:1px solid #e5e7eb}
+    body{font-family:'Poppins',sans-serif;background:linear-gradient(180deg, #fff, #fff);color:#1f2937;min-height:100vh}
+    .dancing {font-family:'Dancing Script',cursive}
+    .gradient-text{background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .card{background:rgba(255,255,255,0.98);border:1px solid rgba(0,0,0,0.04);border-radius:14px;box-shadow:0 10px 30px rgba(138,43,226,0.06)}
+    .btn{padding:.62rem .9rem;border-radius:.75rem;font-weight:600}
+    .btn-primary{background:linear-gradient(90deg,var(--primary),#b266ff);color:#fff}
+    .btn-accent{background:linear-gradient(90deg,var(--accent),#ff97b8);color:#4a1d6a}
+    .input{padding:.6rem .8rem;border-radius:.6rem;border:1px solid #e6e6e6}
+    .thumb{width:100%;height:180px;object-fit:cover;border-radius:12px}
+    .back-btn{display:inline-flex;gap:.5rem;align-items:center;padding:.45rem .65rem;border-radius:10px;border:1px solid #eee;background:#fff}
+    a { text-decoration:none }
+    /* responsive constraints for long page */
+    .container{max-width:1100px;margin:0 auto;padding:20px}
   </style>
 </head>
-<body class="selection:bg-babypink/30">
+<body>
 
-  <!-- ADMIN LOGIN / ONBOARDING MODAL -->
-  <div id="admin-login" class="admin-panel">
-    <div class="admin-content">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold gradient-text mb-2" id="adminModalTitle">Admin Login</h2>
-        <p class="text-gray-600" id="adminModalSubtitle">Enter your credentials to access the admin panel</p>
+  <!-- NAV -->
+  <header class="bg-white sticky top-0 z-40 shadow-sm">
+    <div class="container flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <!-- logo placeholder -->
+        <div id="logo" class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br from-babypink to-violet text-white font-bold dancing">H</div>
+        <div>
+          <a href="#home" class="dancing text-2xl gradient-text" onclick="showPage('home')">HumairaStudio</a>
+          <div class="text-xs text-gray-500">Creative blog & lifestyle</div>
+        </div>
       </div>
 
-      <!-- Setup (if no admin exists) -->
-      <form id="admin-setup" class="space-y-4 hidden" onsubmit="handleSetup(event)">
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Create Username</label>
-          <input class="input focus:outline-none focus:ring-2 focus:ring-violet" id="setup-username" required placeholder="Choose admin username" />
-        </div>
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Create Password</label>
-          <input type="password" class="input focus:outline-none focus:ring-2 focus:ring-violet" id="setup-password" required placeholder="Choose strong password" />
-        </div>
-        <div class="grid gap-3 md:grid-cols-2">
-          <button class="btn btn-primary" type="submit">Save Admin Account</button>
-          <button class="btn bg-gray-500 text-white" type="button" onclick="closeAdminLogin()">Cancel</button>
+      <nav class="hidden md:flex items-center gap-6">
+        <a class="text-gray-700 hover:text-violet" href="#home" onclick="showPage('home')">Home</a>
+        <a class="text-gray-700 hover:text-violet" href="#categories" onclick="showPage('categories')">Categories</a>
+        <a class="text-gray-700 hover:text-violet" href="#about" onclick="showPage('about')">About</a>
+        <a class="text-gray-700 hover:text-violet" href="#contact" onclick="showPage('contact')">Contact</a>
+        <button onclick="showAdminLogin()" class="btn btn-primary text-sm">Admin</button>
+      </nav>
+
+      <button id="mobileToggle" class="md:hidden" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="hidden md:hidden border-t">
+      <div class="container flex flex-col py-3 gap-3">
+        <a href="#home" onclick="showPage('home')">Home</a>
+        <a href="#categories" onclick="showPage('categories')">Categories</a>
+        <a href="#about" onclick="showPage('about')">About</a>
+        <a href="#contact" onclick="showPage('contact')">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="adminModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg">
+      <h3 id="adminModalTitle" class="text-xl font-semibold mb-3">Admin Login</h3>
+      <p id="adminModalSubtitle" class="text-gray-600 mb-4">Enter credentials or set them up if first time.</p>
+
+      <!-- setup -->
+      <form id="setupForm" class="space-y-3 hidden" onsubmit="handleSetup(event)">
+        <input id="setupUser" class="input w-full" placeholder="Choose admin username" required />
+        <input id="setupPass" type="password" class="input w-full" placeholder="Choose password (min 6 chars)" required />
+        <div class="flex gap-3">
+          <button class="btn btn-primary" type="submit">Create Admin</button>
+          <button type="button" class="btn bg-gray-100" onclick="closeAdmin()">Cancel</button>
         </div>
       </form>
 
-      <!-- Login (if admin exists) -->
-      <form id="admin-signin" class="space-y-4 hidden" onsubmit="handleSignIn(event)">
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Username</label>
-          <input class="input focus:outline-none focus:ring-2 focus:ring-violet" id="login-username" required placeholder="Admin username" />
-        </div>
-        <div>
-          <label class="block text-gray-700 font-semibold mb-2">Password</label>
-          <input type="password" class="input focus:outline-none focus:ring-2 focus:ring-violet" id="login-password" required placeholder="Password" />
-        </div>
-        <div class="grid gap-3 md:grid-cols-2">
+      <!-- login -->
+      <form id="loginForm" class="space-y-3 hidden" onsubmit="handleLogin(event)">
+        <input id="loginUser" class="input w-full" placeholder="Username" required />
+        <input id="loginPass" type="password" class="input w-full" placeholder="Password" required />
+        <div class="flex gap-3">
           <button class="btn btn-primary" type="submit">Login</button>
-          <button class="btn bg-gray-500 text-white" type="button" onclick="closeAdminLogin()">Cancel</button>
+          <button type="button" class="btn bg-gray-100" onclick="closeAdmin()">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- ADMIN PANEL -->
-  <div id="admin-panel" class="admin-panel">
-    <div class="admin-content">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold gradient-text">Admin Panel</h2>
-        <div class="flex items-center gap-3">
-          <span class="badge" id="adminUserBadge">admin</span>
-          <button onclick="logout()" class="btn bg-gray-200 hover:bg-gray-300">Log out</button>
-          <button onclick="closeAdminPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+  <!-- ADMIN PANEL (hidden) -->
+  <div id="adminPanel" class="fixed inset-0 bg-black/60 hidden z-50 p-6 overflow-auto">
+    <div class="mx-auto max-w-4xl bg-white rounded-xl p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-semibold">Admin Panel</h3>
+        <div class="flex items-center gap-2">
+          <span id="adminNameBadge" class="text-sm text-gray-600"></span>
+          <button class="btn bg-gray-100" onclick="logoutAdmin()">Logout</button>
+          <button class="text-2xl text-gray-400 ml-2" onclick="closeAdminPanel()">×</button>
         </div>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-4 mb-6">
-        <button onclick="showCreatePost()" class="btn btn-primary">✍️ Write a Post</button>
-        <button onclick="showManagePosts()" class="btn btn-accent">Manage Posts</button>
-      </div>
-
-      <div id="admin-content-area" class="space-y-6">
-        <div class="text-center text-gray-600">
-          <p class="text-lg">Welcome to your admin panel!</p>
-          <p>Select an option above to get started.</p>
+      <div id="adminArea">
+        <div class="flex gap-3 mb-4">
+          <button class="btn btn-primary" onclick="showCreate()">Write a Post</button>
+          <button class="btn bg-gray-100" onclick="showManage()">Manage Posts</button>
         </div>
+
+        <div id="adminContent"></div>
       </div>
     </div>
   </div>
 
-  <!-- NAVIGATION (keep structure) -->
-  <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow">
-    <div class="container mx-auto px-6 py-4">
-      <div class="flex justify-between items-center">
-        <a href="#home" class="text-3xl font-bold dancing-script gradient-text" onclick="showPage('home')">HumairaStudio.com</a>
-        <div class="hidden md:flex space-x-8">
-          <a href="#home" class="nav-link text-gray-700 font-medium" onclick="showPage('home')">Home</a>
-          <a href="#categories" class="nav-link text-gray-700 font-medium" onclick="showPage('categories')">Categories</a>
-          <a href="#about" class="nav-link text-gray-700 font-medium" onclick="showPage('about')">About</a>
-          <a href="#contact" class="nav-link text-gray-700 font-medium" onclick="showPage('contact')">Contact</a>
-          <button onclick="showAdminLogin()" title="Admin" class="text-xs text-gray-400 hover:text-gray-600">•</button>
-        </div>
-        <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-violet">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
-      </div>
-      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-2">
-        <a href="#home" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('home')">Home</a>
-        <a href="#categories" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('categories')">Categories</a>
-        <a href="#about" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('about')">About</a>
-        <a href="#contact" class="block py-2 text-gray-700 hover:text-violet" onclick="showPage('contact')">Contact</a>
-      </div>
-    </div>
-  </nav>
+  <!-- MAIN -->
+  <main class="container pt-8 pb-16">
 
-  <!-- PAGES -->
-  <main class="pt-24">
     <!-- HOME -->
-    <section id="page-home" class="pb-16 min-h-[80vh]">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <h1 class="text-6xl md:text-7xl font-bold dancing-script gradient-text mb-6">Welcome to HumairaStudio.com</h1>
-          <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures</p>
-        </div>
-
-        <!-- Newsletter -->
-        <div class="text-center mb-16">
-          <div class="max-w-md mx-auto">
-            <div class="content-card rounded-2xl p-8">
-              <h3 class="text-2xl font-semibold gradient-text mb-4">Subscribe to My Newsletter</h3>
-              <p class="text-gray-600 mb-6">Get the latest recipes, lifestyle tips, and creative inspiration delivered to your inbox!</p>
-              <form class="space-y-4" onsubmit="handleSubscription(event)">
-                <input type="email" id="newsletter-email" class="input focus:outline-none focus:ring-2 focus:ring-violet" placeholder="Enter your email address" required />
-                <button type="submit" class="w-full btn btn-primary">Subscribe Now</button>
-              </form>
-              <div id="subscription-message" class="mt-4 text-sm hidden"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- About preview -->
-        <div class="text-center mb-16">
-          <div class="content-card rounded-2xl p-8 max-w-4xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center gap-6">
-              <div class="md:w-1/4">
-                <div class="w-32 h-32 bg-gradient-to-br from-babypink to-violet/30 rounded-full flex items-center justify-center mx-auto"><span class="text-5xl">✨</span></div>
-              </div>
-              <div class="md:w-3/4 text-left">
-                <h3 class="text-2xl font-bold gradient-text mb-4">Hi, I'm Humaira!</h3>
-                <p class="text-gray-700 mb-4 leading-relaxed">Welcome to my creative corner! I'm a passionate content creator, food enthusiast, and lifestyle blogger sharing recipes, productivity tips, and daily inspiration.</p>
-                <a href="#about" onclick="showPage('about')" class="inline-block btn btn-primary">Learn More About Me →</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Latest Posts Cards (auto-filled) -->
-        <div class="text-center">
-          <div class="content-card rounded-2xl p-8 max-w-6xl mx-auto">
-            <h3 class="text-3xl font-bold gradient-text mb-8">✨ Discover My Latest Posts</h3>
-            <div id="latest-posts" class="grid md:grid-cols-3 gap-6"></div>
-            <div class="mt-6"><a href="#categories" onclick="showPage('categories')" class="inline-block btn btn-accent">Explore All Categories →</a></div>
-          </div>
-        </div>
+    <section id="page-home">
+      <div class="text-center mb-8">
+        <h1 class="text-5xl dancing gradient-text">Welcome to HumairaStudio</h1>
+        <p class="text-gray-600 mt-2">Creative writing, recipes, student life & gentle inspiration.</p>
       </div>
+
+      <!-- latest posts -->
+      <div class="grid md:grid-cols-3 gap-6" id="latestGrid"></div>
+      <div class="mt-6 text-center"><button class="btn btn-accent" onclick="showPage('categories')">Explore All Categories</button></div>
     </section>
 
     <!-- CATEGORIES HUB -->
-    <section id="page-categories" class="hidden pb-16 min-h-[70vh]">
-      <div class="container mx-auto px-6">
-        <h2 class="text-4xl font-bold gradient-text text-center mb-10">Categories</h2>
-        <p class="text-center text-gray-600 mb-10">Explore different topics and find what inspires you</p>
-        <div id="category-grid" class="grid md:grid-cols-3 gap-6"></div>
+    <section id="page-categories" class="hidden">
+      <div class="text-center mb-6">
+        <h2 class="text-3xl font-semibold gradient-text">Categories</h2>
+        <p class="text-gray-600">Choose a topic to explore posts</p>
       </div>
+      <div id="categoryGrid" class="grid md:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- CATEGORY PAGE (dynamic) -->
-    <section id="page-category" class="hidden pb-16 min-h-[70vh]">
-      <div class="container mx-auto px-6">
-        <h2 id="category-title" class="text-4xl font-bold gradient-text mb-6">Category</h2>
-        <div id="category-posts" class="grid md:grid-cols-2 gap-6"></div>
+    <!-- CATEGORY VIEW -->
+    <section id="page-category" class="hidden">
+      <div class="flex items-center gap-4 mb-6">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <h2 id="categoryTitle" class="text-2xl font-semibold"></h2>
       </div>
+      <div id="categoryPosts" class="grid md:grid-cols-2 gap-6"></div>
     </section>
 
-    <!-- SINGLE POST PAGE -->
-    <section id="page-post" class="hidden pb-16 min-h-[70vh]">
-      <div class="container mx-auto px-6">
-        <article id="post-article" class="content-card rounded-2xl p-8 max-w-3xl mx-auto"></article>
+    <!-- POST VIEW -->
+    <section id="page-post" class="hidden">
+      <div class="flex items-center gap-4 mb-6">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <h2 id="postTitle" class="text-2xl font-semibold"></h2>
       </div>
+      <article id="postArticle" class="card p-6 max-w-3xl"></article>
     </section>
 
     <!-- ABOUT -->
-    <section id="page-about" class="hidden pb-16 min-h-[60vh]">
-      <div class="container mx-auto px-6 max-w-4xl">
-        <h2 class="text-4xl font-bold gradient-text mb-6">About Me</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">Welcome to my creative corner of the internet! I'm a passionate content creator, food enthusiast, and lifestyle blogger who believes in the power of sharing stories and inspiration.</p>
-        <p class="text-gray-700 leading-relaxed mb-4">As an international student, I balance studies, work, and creativity. Here I share the lessons I've learned, the recipes that comfort me, and the projects that bring joy to my daily life.</p>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="content-card rounded-2xl p-6">
-            <h3 class="font-semibold mb-2">What I Share</h3>
-            <ul class="text-gray-700 list-disc list-inside space-y-1">
-              <li>Tested recipes</li>
-              <li>Student life tips</li>
-              <li>DIY & creative projects</li>
-              <li>Writing insights</li>
-              <li>Daily inspiration</li>
-            </ul>
+    <section id="page-about" class="hidden">
+      <div class="grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h2 class="text-3xl font-semibold gradient-text">About Humaira</h2>
+          <p class="text-gray-700 mt-3 leading-relaxed">Hi — I'm Humaira. I write about creative projects, simple recipes, and student life. I love minimal design, cozy coffee, and learning new things. This blog collects small ideas that brighten daily life.</p>
+          <div class="mt-4">
+            <a href="mailto:lijuhumaira2001@gmail.com" class="text-violet">lijuhumaira2001@gmail.com</a><br>
+            <a href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="text-violet">LinkedIn: Humaira Liju</a>
           </div>
-          <div class="content-card rounded-2xl p-6">
-            <h3 class="font-semibold mb-2">Services</h3>
-            <ul class="text-gray-700 list-disc list-inside space-y-1">
-              <li>Content & blog writing</li>
-              <li>Recipe development</li>
-              <li>Lifestyle content</li>
-              <li>Social media content</li>
-            </ul>
-          </div>
+        </div>
+        <div>
+          <!-- about image placeholder -->
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1e9443ed5d9c8c9f0a1f1e7d9f3b6f7a" alt="Humaira" class="thumb">
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="page-contact" class="hidden pb-16 min-h-[60vh]">
-      <div class="container mx-auto px-6 max-w-4xl">
-        <h2 class="text-4xl font-bold gradient-text mb-4">Let's Connect!</h2>
-        <p class="text-gray-700 mb-6">Ready to collaborate? I'm available for content writing, blog writing, and creative projects. Let's bring your ideas to life together! ✨</p>
-        <form class="content-card rounded-2xl p-6 grid gap-4" onsubmit="event.preventDefault();alert('Thanks! Message received.');">
-          <input class="input" placeholder="Your Name" required />
-          <input class="input" type="email" placeholder="Your Email" required />
-          <select class="input"><option>Content Writing Project</option><option>Blog Writing Services</option><option>Recipe Development</option><option>Collaboration Opportunity</option><option>General Inquiry</option></select>
-          <textarea class="input min-h-[140px]" placeholder="Your Message" required></textarea>
-          <button class="btn btn-primary" type="submit">Send Message ✨</button>
-        </form>
+    <section id="page-contact" class="hidden">
+      <div class="max-w-3xl mx-auto card p-6">
+        <h2 class="text-2xl font-semibold gradient-text mb-3">Contact</h2>
+        <p class="text-gray-700 mb-4">Email or connect on LinkedIn — I reply to collaborations and messages.</p>
+        <div class="grid gap-3">
+          <a class="btn btn-primary" href="mailto:lijuhumaira2001@gmail.com">Email Me</a>
+          <a class="btn btn-accent" href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">LinkedIn</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER (kept) -->
-  <footer class="bg-white/70 mt-8">
-    <div class="container mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
-      <div>
-        <h3 class="font-bold mb-2">HumairaStudio.com</h3>
-        <p class="text-gray-600">Your creative space for inspiration, delicious recipes, lifestyle tips, and artistic adventures.</p>
+  <!-- FOOTER -->
+  <footer class="bg-white border-t py-8">
+    <div class="container text-center">
+      <div class="mb-3">
+        <div class="dancing text-2xl gradient-text">HumairaStudio</div>
+        <div class="text-sm text-gray-600 mt-1">© <span id="ftYear"></span> Humaira Liju</div>
       </div>
-      <div>
-        <h4 class="font-semibold mb-2">Quick Links</h4>
-        <ul class="space-y-1 text-gray-700">
-          <li><a href="#home" onclick="showPage('home')">Home</a></li>
-          <li><a href="#categories" onclick="showPage('categories')">Categories</a></li>
-          <li><a href="#about" onclick="showPage('about')">About</a></li>
-          <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-2">Services</h4>
-        <ul class="space-y-1 text-gray-700">
-          <li>✍️ Content Writing</li>
-          <li>Blog Writing</li>
-          <li>Recipe Development</li>
-          <li>Lifestyle Content</li>
-        </ul>
+      <div class="flex items-center justify-center gap-4 text-sm text-gray-600">
+        <a href="mailto:lijuhumaira2001@gmail.com">lijuhumaira2001@gmail.com</a>
+        <span>•</span>
+        <a href="https://www.linkedin.com/in/humaira-liju-816a18251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">LinkedIn</a>
       </div>
     </div>
-    <div class="text-center text-gray-500 text-sm pb-8">© 2024 HumairaStudio.com — Spreading creativity, one post at a time ✨</div>
   </footer>
 
-  <!-- UTIL: Templates -->
-  <template id="tpl-card">
-    <div class="rounded-xl p-6 hover-lift cursor-pointer bg-gradient-to-br from-babypink/50 to-violet/10">
-      <h4 class="text-lg font-bold text-gray-800 mb-2"></h4>
-      <p class="text-gray-600 text-sm mb-4"></p>
-      <span class="text-xs text-gray-500"></span>
+  <!-- Templates -->
+  <template id="cardTpl">
+    <div class="card p-4 hover:shadow-lg">
+      <img class="thumb mb-3" />
+      <h3 class="text-lg font-semibold mb-2"></h3>
+      <p class="text-gray-600 text-sm mb-3"></p>
+      <div class="text-sm text-gray-500"></div>
     </div>
   </template>
 
-  <script>
-    /* =========================
-       ROUTING & PAGE DISPLAY
-       ========================= */
-    const PAGES = ['home','categories','category','post','about','contact'];
-    function showPage(name){
-      PAGES.forEach(p=>document.getElementById('page-'+p).classList.add('hidden'));
-      document.getElementById('page-'+name).classList.remove('hidden');
-      if(name==='categories') renderCategoryGrid();
-    }
-    function showCategoryPage(slug){
-      const cat = CATEGORIES.find(c=>c.slug===slug);
-      if(!cat) return;
-      document.getElementById('category-title').textContent = cat.title;
-      const wrap = document.getElementById('category-posts');
-      wrap.innerHTML='';
-      const posts = getPosts().filter(p=>p.category===slug).sort((a,b)=>b.created-a.created);
-      posts.forEach(p=>{
-        const el = document.createElement('div');
-        el.className = 'content-card rounded-2xl p-6';
-        el.innerHTML = `<h3 class="text-xl font-semibold mb-2">${p.title}</h3>
-                        <p class="text-gray-700 mb-3 line-clamp-3">${p.content.substring(0,180)}...</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500"><span class="badge">${cat.title}</span><a class="text-violet" href="#" data-id="${p.id}">Read More →</a></div>`;
-        el.querySelector('a').addEventListener('click', (e)=>{e.preventDefault(); showPost(p.id)});
-        wrap.appendChild(el);
-      });
-      showPage('category');
-    }
-    function showPost(id){
-      const p = getPosts().find(x=>x.id===id); if(!p) return;
-      const catTitle = (CATEGORIES.find(c=>c.slug===p.category)||{}).title||'';
-      const art = document.getElementById('post-article');
-      art.innerHTML = `
-        <h1 class="text-3xl md:text-4xl font-bold gradient-text mb-3">${p.title}</h1>
-        <div class="text-sm text-gray-500 mb-6">
-          <span class="badge">${catTitle}</span>
-          <span class="ml-2">${new Date(p.created).toLocaleDateString()}</span>
-        </div>
-        ${p.cover ? `<img class="rounded-xl mb-6" src="${p.cover}" alt="${p.title}">`:''}
-        <div class="prose max-w-none">${p.content.replace(/\n/g,'<br>')}</div>`;
-      showPage('post');
-    }
+<script>
+/* ============================
+   Site Data + Local Storage API
+   ============================ */
+const CATS = [
+  {title:'Creative Writing', slug:'creative-writing'},
+  {title:'Recipes', slug:'recipes'},
+  {title:'Lifestyle', slug:'lifestyle'},
+  {title:'Skincare', slug:'skincare'},
+  {title:'Coffee', slug:'coffee'}
+];
 
-    /* =========================
-       DATA: Categories & Posts
-       ========================= */
-    const CATEGORIES = [
-      { title:'Creative Writing', slug:'creative-writing', blurb:'Stories, reflections, and writing craft.' },
-      { title:'Lifestyle', slug:'lifestyle', blurb:'Daily routines, wellness, and balance.' },
-      { title:'Recipes', slug:'recipes', blurb:'Delicious dishes from my kitchen.' },
-      { title:'DIY Crafts', slug:'diy-crafts', blurb:'Creative projects and decor ideas.' },
-      { title:'Student Life', slug:'student-life', blurb:'Tips and experiences as a student.' },
-      { title:'Daily Inspiration', slug:'inspiration', blurb:'Motivations and reflections.' },
-      { title:'Writing', slug:'writing', blurb:'Content creation insights.' }
-    ];
+const STORAGE = {
+  postsKey: 'humaira_posts_v2',
+  adminKey: 'humaira_admin_v2',
+  sessionKey: 'humaira_session_v2',
+  seedKey: 'humaira_seed_v2',
+  readPosts(){ try { return JSON.parse(localStorage.getItem(this.postsKey)||'[]') } catch(e){ return [] } },
+  writePosts(arr){ localStorage.setItem(this.postsKey, JSON.stringify(arr)) }
+};
 
-    function getPosts(){
-      const raw = localStorage.getItem('hs_posts');
-      return raw? JSON.parse(raw): [];
-    }
-    function setPosts(arr){
-      localStorage.setItem('hs_posts', JSON.stringify(arr));
-    }
+/* Helper */
+function uid(){ return 'id_'+Math.random().toString(36).slice(2,10) }
+function fmtDate(ts){ return new Date(ts).toLocaleDateString() }
+function goBack(){ if(history.length>1) history.back(); else showPage('categories') }
 
-    // Seed default cards on home (pull latest 3)
-    function renderLatest(){
-      const holder = document.getElementById('latest-posts');
-      holder.innerHTML='';
-      const posts = getPosts().sort((a,b)=>b.created-a.created).slice(0,3);
-      posts.forEach(p=>{
-        const card = document.getElementById('tpl-card').content.cloneNode(true);
-        card.querySelector('h4').textContent = p.title;
-        card.querySelector('p').textContent = (p.content||'').substring(0,95)+'...';
-        card.querySelector('span').textContent = new Date(p.created).toLocaleDateString();
-        const box = card.querySelector('div');
-        box.addEventListener('click', ()=>showPost(p.id));
-        holder.appendChild(card);
-      });
-    }
+/* ============================
+   Seed default posts (once)
+   ============================ */
+(function seedOnce(){
+  if(localStorage.getItem(STORAGE.seedKey)) return;
+  const sample = [];
 
-    function renderCategoryGrid(){
-      const grid = document.getElementById('category-grid');
-      grid.innerHTML='';
-      CATEGORIES.forEach(c=>{
-        const el = document.createElement('div');
-        el.className = 'rounded-xl p-6 hover-lift cursor-pointer bg-gradient-to-br from-babypink/40 to-violet/10';
-        el.innerHTML = `<h4 class="text-lg font-bold mb-2 text-gray-800">${c.title}</h4><p class="text-gray-600 text-sm">${c.blurb}</p>`;
-        el.addEventListener('click', ()=>showCategoryPage(c.slug));
-        grid.appendChild(el);
-      });
-    }
+  // Creative Writing (3)
+  sample.push({
+    id: uid(),
+    title: 'The Usage of Notion for Students',
+    category: 'creative-writing',
+    created: Date.now() - 1000*60*60*24*3,
+    cover: 'https://images.unsplash.com/photo-1557800636-894a64c1696f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2e4b5e35b1f3f6a2',
+    content: `Notion is one of the most powerful productivity tools for students. It works like a digital notebook where you can organize class notes, track assignments, and manage projects in one place. Students can create pages for different subjects, link resources, and even collaborate with classmates. Unlike traditional note-taking apps, Notion allows full customization—you can design study planners, exam schedules, or personal journals with templates. Its database feature helps students manage reading lists or research work effectively. Another benefit is accessibility—everything is synced across devices, so you can study from anywhere. For group work, shared pages allow easy communication and task division. Students who struggle with time management find Notion especially useful because it combines task lists, calendars, and reminders into one streamlined tool. By using Notion, students don’t just stay organized—they actually build a system that makes learning easier, faster, and more enjoyable.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'A Tiny Sunday Story',
+    category: 'creative-writing',
+    created: Date.now() - 1000*60*60*24*6,
+    cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3e3f8a1c3b8ef3c7',
+    content: `There are small Sundays that feel like a warm cup of tea: slow, bright, and easy. Today, I write short sentences about quiet rooms and the way sunlight finds the corners of my desk.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Writing Prompt: The Purple Envelope',
+    category: 'creative-writing',
+    created: Date.now() - 1000*60*60*24*9,
+    cover: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7a458d0b6fa4dd2a',
+    content: `A purple envelope arrives with no return address. It’s the start of a small mystery and a good reason to write.`
+  });
 
-    /* =========================
-       ADMIN: Single-owner auth
-       ========================= */
-    const ADMIN_KEY = 'hs_admin';
-    const SESSION_KEY = 'hs_session';
+  // Recipes (3)
+  sample.push({
+    id: uid(),
+    title: 'Simple Chocolate Chip Cookies',
+    category: 'recipes',
+    created: Date.now() - 1000*60*60*24*2,
+    cover: 'https://images.unsplash.com/photo-1542200550-0b3e7b0d9e30?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0d5c5f1a6f7a7b3d',
+    content: `Short, buttery chocolate chip cookies — a minimalist recipe: mix butter, sugar, egg, flour, baking soda, salt, and chocolate chips. Chill 30 mins, bake 10–12 minutes at 180°C.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Morning Pancake Stack',
+    category: 'recipes',
+    created: Date.now() - 1000*60*60*24*12,
+    cover: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b9a8c7c7c7f1d1f',
+    content: `A fluffy pancake recipe that keeps things simple: whisk milk, egg, flour, baking powder, pinch of salt; cook small rounds on low-medium heat.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Masala Chai — Simple at Home',
+    category: 'recipes',
+    created: Date.now() - 1000*60*60*24*20,
+    cover: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=da6f8ad3b2c1f7c8',
+    content: `Brew strong tea with milk, sugar, and crushed spices (cardamom, cinnamon). Simmer gently for 5 minutes — strain and enjoy.`
+  });
 
-    async function sha256(text){
-      const enc = new TextEncoder().encode(text);
-      const buf = await crypto.subtle.digest('SHA-256', enc);
-      return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
+  // Lifestyle (3)
+  sample.push({
+    id: uid(),
+    title: 'My Morning Routine for Focus',
+    category: 'lifestyle',
+    created: Date.now() - 1000*60*60*24*4,
+    cover: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2d6f3f3c4b3a8fd1',
+    content: `A gentle morning: wake up, hydrate, 10 minutes of light stretching, 20 minutes of focused study, and a small breakfast.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Packing Light for Short Trips',
+    category: 'lifestyle',
+    created: Date.now() - 1000*60*60*24*14,
+    cover: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=4f9a1b6a3d2a1f6c',
+    content: `Choose neutral outfits, limit shoes, and use packing cubes. Keep toiletries minimal.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Quiet Evenings: How I Unwind',
+    category: 'lifestyle',
+    created: Date.now() - 1000*60*60*24*18,
+    cover: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=9d3f2b8a4e0f6b3a',
+    content: `Reading, herbal tea, and a short reflection journal — a 30-minute routine to close the day.`
+  });
 
-    function isAuthed(){ return !!localStorage.getItem(SESSION_KEY); }
+  // Skincare (3)
+  sample.push({
+    id: uid(),
+    title: '5-Minute Hydrating Face Mask',
+    category: 'skincare',
+    created: Date.now() - 1000*60*60*24*7,
+    cover: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1e9443ed5d9c8c9f0a1f1e7d9f3b6f7a',
+    content: `Mix honey and yogurt, apply 5–10 minutes, rinse for a soft glow. Simple and nourishing.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Nightly Skincare Routine — Minimal',
+    category: 'skincare',
+    created: Date.now() - 1000*60*60*24*11,
+    cover: 'https://images.unsplash.com/photo-1588774069265-7b8b8b8a1f3a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=ab38f7b2c4a9b8d1',
+    content: `Cleanse, hydrate with serum, apply light moisturizer. Add sunscreen in morning.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Face Oil for Winter',
+    category: 'skincare',
+    created: Date.now() - 1000*60*60*24*22,
+    cover: 'https://images.unsplash.com/photo-1536305030013-3c8c7d4a6b1e?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7f3e1c8a6b1c8d2f',
+    content: `A light jojoba oil massage helps lock moisture during cold weather.`
+  });
 
-    function showAdminLogin(){
-      const hasAdmin = !!localStorage.getItem(ADMIN_KEY);
-      document.getElementById('admin-login').style.display = 'block';
-      document.getElementById('adminModalTitle').textContent = hasAdmin? 'Admin Login' : 'Create Admin Account';
-      document.getElementById('adminModalSubtitle').textContent = hasAdmin? 'Enter your credentials to access the admin panel' : 'Set your username & password. Only you can edit the site.';
-      document.getElementById('admin-setup').classList.toggle('hidden', hasAdmin);
-      document.getElementById('admin-signin').classList.toggle('hidden', !hasAdmin);
-    }
-    function closeAdminLogin(){ document.getElementById('admin-login').style.display='none'; }
+  // Coffee (3)
+  sample.push({
+    id: uid(),
+    title: 'How to Brew Perfect Pour Over',
+    category: 'coffee',
+    created: Date.now() - 1000*60*60*24*5,
+    cover: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0d3f4e5a1b6c7d8e',
+    content: `Use medium-fine grind, 92°C water, bloom 30s, pour slowly for 3 minutes. Clean rinse and enjoy.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Latte Art Basics — Foam & Pitcher',
+    category: 'coffee',
+    created: Date.now() - 1000*60*60*24*13,
+    cover: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=da6f8ad3b2c1f7c8',
+    content: `Perfect microfoam is key. Steam milk until shiny, pour steadily, and practice simple heart shapes.`
+  });
+  sample.push({
+    id: uid(),
+    title: 'Simple Cold Brew at Home',
+    category: 'coffee',
+    created: Date.now() - 1000*60*60*24*25,
+    cover: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=6dbf2f1c4a3e0d5b',
+    content: `Coarse grind, 1:8 coffee-water ratio, steep 16 hours, strain, dilute and serve over ice.`
+  });
 
-    async function handleSetup(e){
-      e.preventDefault();
-      const u = document.getElementById('setup-username').value.trim();
-      const p = document.getElementById('setup-password').value;
-      if(u.length<3 || p.length<6){ alert('Use a longer username and password.'); return; }
-      const salt = (Math.random()+1).toString(36).slice(2);
-      const hash = await sha256(p+salt);
-      localStorage.setItem(ADMIN_KEY, JSON.stringify({u, salt, hash}));
-      localStorage.setItem(SESSION_KEY, u);
-      closeAdminLogin();
-      openAdminPanel();
-    }
+  // write to storage
+  localStorage.setItem(STORAGE.postsKey, JSON.stringify(sample));
+  localStorage.setItem(STORAGE.seedKey, '1');
+})();
 
-    async function handleSignIn(e){
-      e.preventDefault();
-      const rec = JSON.parse(localStorage.getItem(ADMIN_KEY)||'{}');
-      const u = document.getElementById('login-username').value.trim();
-      const p = document.getElementById('login-password').value;
-      const test = await sha256(p + (rec.salt||''));
-      if(rec.u===u && rec.hash===test){
-        localStorage.setItem(SESSION_KEY, u);
-        closeAdminLogin();
-        openAdminPanel();
-      } else {
-        alert('Invalid credentials');
-      }
-    }
+/* ============================
+   Rendering Functions
+   ============================ */
 
-    function logout(){
-      localStorage.removeItem(SESSION_KEY);
-      closeAdminPanel();
-    }
+function getPosts(){
+  return STORAGE.readPosts ? STORAGE.readPosts() : JSON.parse(localStorage.getItem(STORAGE.postsKey) || '[]');
+}
 
-    function openAdminPanel(){
-      if(!isAuthed()){ showAdminLogin(); return; }
-      document.getElementById('adminUserBadge').textContent = localStorage.getItem(SESSION_KEY);
-      document.getElementById('admin-panel').style.display='block';
-      showCreatePost();
-    }
-    function closeAdminPanel(){ document.getElementById('admin-panel').style.display='none'; }
+function renderLatest(){
+  const container = document.getElementById('latestGrid');
+  container.innerHTML = '';
+  const posts = getPosts().sort((a,b)=>b.created - a.created).slice(0,6);
+  posts.forEach(p=>{
+    const tpl = document.getElementById('cardTpl').content.cloneNode(true);
+    tpl.querySelector('img').src = p.cover || 'https://via.placeholder.com/800x450?text=HumairaStudio';
+    tpl.querySelector('h3').textContent = p.title;
+    tpl.querySelector('p').textContent = (p.content||'').substring(0,120) + '...';
+    tpl.querySelector('div').textContent = fmtDate(p.created);
+    tpl.querySelector('div.card').addEventListener('click', ()=> showPost(p.id));
+    // fallback: make the whole card clickable
+    const card = tpl.querySelector('div');
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', ()=> showPost(p.id));
+    container.appendChild(tpl);
+  });
+}
 
-    // Admin views
-    function showCreatePost(){
-      if(!isAuthed()) return showAdminLogin();
-      const csel = CATEGORIES.map(c=>`<option value="${c.slug}">${c.title}</option>`).join('');
-      document.getElementById('admin-content-area').innerHTML = `
-        <form class="grid gap-4" onsubmit="savePost(event)">
-          <div class="grid md:grid-cols-2 gap-4">
-            <input class="input" id="post-title" placeholder="Post title" required />
-            <select class="input" id="post-category" required>${csel}</select>
+function renderCategories(){
+  const grid = document.getElementById('categoryGrid');
+  grid.innerHTML = '';
+  CATS.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'card p-6 cursor-pointer';
+    el.innerHTML = `<h3 class="text-xl font-semibold mb-2">${c.title}</h3><p class="text-gray-600 text-sm">Explore ${c.title} posts</p>`;
+    el.addEventListener('click', ()=> showCategory(c.slug));
+    grid.appendChild(el);
+  });
+}
+
+function showCategory(slug){
+  const cat = CATS.find(c=>c.slug===slug);
+  if(!cat) return;
+  document.getElementById('categoryTitle').textContent = cat.title;
+  const wrap = document.getElementById('categoryPosts');
+  wrap.innerHTML = '';
+  const posts = getPosts().filter(p=>p.category === slug).sort((a,b)=>b.created - a.created);
+  if(posts.length === 0){
+    wrap.innerHTML = '<div class="text-gray-500">No posts here yet.</div>';
+  } else {
+    posts.forEach(p=>{
+      const box = document.createElement('div');
+      box.className = 'card p-4';
+      box.innerHTML = `
+        <div class="md:flex gap-4">
+          <div class="md:w-1/3"><img src="${p.cover||''}" class="thumb"></div>
+          <div class="md:flex-1">
+            <h3 class="text-lg font-semibold mb-2">${p.title}</h3>
+            <p class="text-gray-600 mb-3">${(p.content||'').substring(0,160)}...</p>
+            <div class="flex items-center gap-3">
+              <button class="btn btn-primary" onclick="showPost('${p.id}')">Read</button>
+              <button class="btn bg-gray-100" onclick="goBack()">Back</button>
+            </div>
           </div>
-          <input class="input" id="post-cover" placeholder="Cover image URL (optional)" />
-          <textarea class="input min-h-[200px]" id="post-content" placeholder="Write your content here..." required></textarea>
-          <div class="grid md:grid-cols-2 gap-3">
-            <button class="btn btn-primary" type="submit">Publish Post</button>
-            <button class="btn bg-gray-200" type="button" onclick="showManagePosts()">Cancel</button>
-          </div>
-        </form>`;
-    }
+        </div>`;
+      wrap.appendChild(box);
+    });
+  }
+  showOnly('category');
+}
 
-    function showManagePosts(){
-      if(!isAuthed()) return showAdminLogin();
-      const list = getPosts().sort((a,b)=>b.created-a.created).map(p=>`
-        <div class="content-card rounded-2xl p-4 flex items-start gap-3">
-          <div class="flex-1">
-            <div class="font-semibold">${p.title}</div>
-            <div class="text-sm text-gray-500">${(CATEGORIES.find(c=>c.slug===p.category)||{}).title||p.category} • ${new Date(p.created).toLocaleString()}</div>
-          </div>
-          <div class="flex gap-2">
-            <button class="btn bg-gray-200" onclick="editPost('${p.id}')">Edit</button>
-            <button class="btn bg-red-100 text-red-700" onclick="deletePost('${p.id}')">Delete</button>
-          </div>
-        </div>`).join('');
-      document.getElementById('admin-content-area').innerHTML = `<div class="grid gap-3">${list || '<div class=\"text-gray-500\">No posts yet.</div>'}</div>`;
-    }
+function showPost(id){
+  const p = getPosts().find(x=>x.id===id);
+  if(!p) return alert('Post not found');
+  document.getElementById('postTitle').textContent = p.title;
+  const art = document.getElementById('postArticle');
+  art.innerHTML = `
+    <div class="mb-4">
+      <div class="text-sm text-gray-500">${fmtDate(p.created)} • <span class="text-violet font-semibold">${(CATS.find(c=>c.slug===p.category)||{}).title||p.category}</span></div>
+      ${p.cover ? `<img src="${p.cover}" class="thumb mb-4">` : ''}
+    </div>
+    <div class="prose">${(p.content||'').replace(/\n/g,'<br>')}</div>
+    <div class="mt-6"><button class="btn bg-gray-100" onclick="goBack()">Back</button></div>
+  `;
+  showOnly('post');
+}
 
-    function uid(){ return 'p_'+Math.random().toString(36).slice(2,10); }
+function showPage(name){
+  // hide all page sections
+  ['home','categories','category','post','about','contact'].forEach(p=>{
+    const el = document.getElementById('page-'+p);
+    if(el) el.classList.add('hidden');
+  });
+  const el = document.getElementById('page-'+name);
+  if(!el) return;
+  el.classList.remove('hidden');
 
-    function savePost(e){
-      e.preventDefault();
-      const id = document.getElementById('post-id')?.value || uid();
-      const title = document.getElementById('post-title').value.trim();
-      const category = document.getElementById('post-category').value;
-      const cover = document.getElementById('post-cover').value.trim();
-      const content = document.getElementById('post-content').value.trim();
-      const posts = getPosts();
-      const now = Date.now();
-      const existing = posts.find(p=>p.id===id);
-      if(existing){ Object.assign(existing,{title,category,cover,content,updated:now}); }
-      else { posts.push({id,title,category,cover,content,created:now}); }
-      setPosts(posts);
-      renderLatest();
-      alert('Saved!');
-      showManagePosts();
-    }
-
-    function editPost(id){
-      const p = getPosts().find(x=>x.id===id); if(!p) return;
-      const csel = CATEGORIES.map(c=>`<option value="${c.slug}" ${p.category===c.slug?'selected':''}>${c.title}</option>`).join('');
-      document.getElementById('admin-content-area').innerHTML = `
-        <form class="grid gap-4" onsubmit="savePost(event)">
-          <input type="hidden" id="post-id" value="${p.id}">
-          <div class="grid md:grid-cols-2 gap-4">
-            <input class="input" id="post-title" value="${p.title.replace(/"/g,'&quot;')}" required />
-            <select class="input" id="post-category" required>${csel}</select>
-          </div>
-          <input class="input" id="post-cover" value="${(p.cover||'').replace(/"/g,'&quot;')}" />
-          <textarea class="input min-h-[200px]" id="post-content" required>${p.content.replace(/</g,'&lt;')}</textarea>
-          <div class="grid md:grid-cols-2 gap-3">
-            <button class="btn btn-primary" type="submit">Update Post</button>
-            <button class="btn bg-gray-200" type="button" onclick="showManagePosts()">Cancel</button>
-          </div>
-        </form>`;
-    }
-
-    function deletePost(id){
-      if(!confirm('Delete this post?')) return;
-      setPosts(getPosts().filter(p=>p.id!==id));
-      renderLatest();
-      showManagePosts();
-    }
-
-    /* =========================
-       NEWSLETTER (demo only)
-       ========================= */
-    function handleSubscription(e){
-      e.preventDefault();
-      const email = document.getElementById('newsletter-email').value.trim();
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return alert('Please enter a valid email');
-      const list = JSON.parse(localStorage.getItem('hs_subs')||'[]');
-      if(!list.includes(email)) list.push(email);
-      localStorage.setItem('hs_subs', JSON.stringify(list));
-      const msg = document.getElementById('subscription-message');
-      msg.textContent = 'Thanks! You are subscribed.';
-      msg.classList.remove('hidden');
-      e.target.reset();
-    }
-
-    /* =========================
-       SEED CONTENT — adds the requested Notion article once
-       ========================= */
-    (function seed(){
-      const seeded = localStorage.getItem('hs_seed_v1');
-      if(seeded) return;
-      const posts = getPosts();
-      posts.push({
-        id: uid(),
-        title: 'The Usage of Notion for Students',
-        category: 'creative-writing',
-        cover: '',
-        created: Date.now()-60000,
-        content: `Notion is one of the most powerful productivity tools for students. It works like a digital notebook where you can organize class notes, track assignments, and manage projects in one place. Students can create pages for different subjects, link resources, and even collaborate with classmates. Unlike traditional note-taking apps, Notion allows full customization—you can design study planners, exam schedules, or personal journals with templates. Its database feature helps students manage reading lists or research work effectively. Another benefit is accessibility—everything is synced across devices, so you can study from anywhere. For group work, shared pages allow easy communication and task division. Students who struggle with time management find Notion especially useful because it combines task lists, calendars, and reminders into one streamlined tool. By using Notion, students don’t just stay organized—they actually build a system that makes learning easier, faster, and more enjoyable.`
-      });
-      setPosts(posts);
-      localStorage.setItem('hs_seed_v1','1');
-    })();
-
-    // INIT
+  // additional render logic
+  if(name === 'home') {
     renderLatest();
-    renderCategoryGrid();
-    showPage('home');
+  } else if(name === 'categories'){
+    renderCategories();
+  } else if(name === 'about'){
+    // nothing extra
+  } else if(name === 'contact'){
+    // nothing extra
+  }
+}
 
-    // Mobile menu
-    document.getElementById('mobile-menu-btn').addEventListener('click',()=>{
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
+/* ============================
+   Admin: single-owner auth + UI
+   ============================ */
 
-    // Hash routing support (/#/category/slug, /#/post/id)
-    window.addEventListener('hashchange', ()=>{
-      const h = location.hash.replace(/^#\/?/, '');
-      const [first, second] = h.split('/');
-      if(first==='category' && second){ return showCategoryPage(second); }
-      if(first==='post' && second){ return showPost(second); }
-      if(PAGES.includes(first)) return showPage(first);
-    });
-  </script>
+async function sha256(msg){
+  const enc = new TextEncoder().encode(msg);
+  const hash = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function isLoggedIn(){ return !!localStorage.getItem(STORAGE.sessionKey) }
+
+function showAdminLogin(){
+  const has = !!localStorage.getItem(STORAGE.adminKey);
+  document.getElementById('adminModal').classList.remove('hidden');
+  document.getElementById('setupForm').classList.toggle('hidden', has);
+  document.getElementById('loginForm').classList.toggle('hidden', !has);
+  document.getElementById('adminModalTitle').textContent = has ? 'Admin Login' : 'Create Admin Account';
+  document.getElementById('adminModalSubtitle').textContent = has ? 'Enter your credentials' : 'Set username & password';
+}
+
+function closeAdmin(){ document.getElementById('adminModal').classList.add('hidden') }
+
+async function handleSetup(e){
+  e.preventDefault();
+  const u = document.getElementById('setupUser').value.trim();
+  const p = document.getElementById('setupPass').value;
+  if(u.length < 2 || p.length < 6) return alert('Username length >=2 and password >=6');
+  const salt = Math.random().toString(36).slice(2);
+  const hash = await sha256(p + salt);
+  localStorage.setItem(STORAGE.adminKey, JSON.stringify({u, salt, hash}));
+  localStorage.setItem(STORAGE.sessionKey, u);
+  closeAdmin();
+  openAdminPanel();
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  const data = JSON.parse(localStorage.getItem(STORAGE.adminKey) || '{}');
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const test = await sha256(p + (data.salt || ''));
+  if(data.u === u && data.hash === test){
+    localStorage.setItem(STORAGE.sessionKey, u);
+    closeAdmin();
+    openAdminPanel();
+  } else {
+    alert('Invalid login');
+  }
+}
+
+function openAdminPanel(){
+  if(!isLoggedIn()) return showAdminLogin();
+  document.getElementById('adminPanel').classList.remove('hidden');
+  document.getElementById('adminNameBadge').textContent = localStorage.getItem(STORAGE.sessionKey) || '';
+  showManage();
+}
+
+function closeAdminPanel(){ document.getElementById('adminPanel').classList.add('hidden') }
+
+function logoutAdmin(){
+  localStorage.removeItem(STORAGE.sessionKey);
+  closeAdminPanel();
+}
+
+/* Admin Views: create/manage/edit posts */
+function showCreate(){
+  if(!isLoggedIn()) return showAdminLogin();
+  const catOptions = CATS.map(c=>`<option value="${c.slug}">${c.title}</option>`).join('');
+  document.getElementById('adminContent').innerHTML = `
+    <form onsubmit="savePost(event)" class="space-y-3">
+      <input id="postTitleIn" class="input w-full" placeholder="Post title" required />
+      <select id="postCategoryIn" class="input w-full">${catOptions}</select>
+      <input id="postCoverIn" class="input w-full" placeholder="Cover image URL (optional)" />
+      <textarea id="postContentIn" class="input w-full min-h-[160px]" placeholder="Write content..." required></textarea>
+      <div class="flex gap-3">
+        <button class="btn btn-primary" type="submit">Publish</button>
+        <button type="button" class="btn bg-gray-100" onclick="showManage()">Cancel</button>
+      </div>
+    </form>`;
+}
+
+function showManage(){
+  if(!isLoggedIn()) return showAdminLogin();
+  const posts = getPosts().sort((a,b)=>b.created - a.created);
+  if(posts.length === 0){
+    document.getElementById('adminContent').innerHTML = '<div class="text-gray-500">No posts yet</div>';
+    return;
+  }
+  const html = posts.map(p=>`
+    <div class="card p-3 mb-3 flex items-center justify-between">
+      <div>
+        <div class="font-semibold">${p.title}</div>
+        <div class="text-sm text-gray-500">${(CATS.find(c=>c.slug===p.category)||{}).title || p.category} • ${fmtDate(p.created)}</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn bg-gray-100" onclick="editPost('${p.id}')">Edit</button>
+        <button class="btn bg-red-100 text-red-700" onclick="deletePost('${p.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('adminContent').innerHTML = html;
+}
+
+function savePost(e){
+  e.preventDefault();
+  const id = document.getElementById('postIdIn') ? document.getElementById('postIdIn').value : null;
+  const title = document.getElementById('postTitleIn').value.trim();
+  const category = document.getElementById('postCategoryIn').value;
+  const cover = document.getElementById('postCoverIn').value.trim();
+  const content = document.getElementById('postContentIn').value.trim();
+  if(!title || !category || !content) return alert('Please fill title, category and content');
+  const posts = getPosts();
+  if(id){
+    const p = posts.find(x=>x.id===id);
+    if(p){ p.title = title; p.category = category; p.cover = cover; p.content = content; p.updated = Date.now(); }
+  } else {
+    posts.push({id: uid(), title, category, cover, content, created: Date.now()});
+  }
+  localStorage.setItem(STORAGE.postsKey, JSON.stringify(posts));
+  alert('Saved');
+  renderLatest(); showManage();
+}
+
+function editPost(id){
+  if(!isLoggedIn()) return showAdminLogin();
+  const p = getPosts().find(x=>x.id===id); if(!p) return alert('Not found');
+  const catOptions = CATS.map(c=>`<option value="${c.slug}" ${p.category===c.slug?'selected':''}>${c.title}</option>`).join('');
+  document.getElementById('adminContent').innerHTML = `
+    <form onsubmit="saveEditedPost(event)" class="space-y-3">
+      <input type="hidden" id="postIdIn" value="${p.id}" />
+      <input id="postTitleIn" class="input w-full" value="${(p.title||'').replace(/"/g,'&quot;')}" required />
+      <select id="postCategoryIn" class="input w-full">${catOptions}</select>
+      <input id="postCoverIn" class="input w-full" value="${(p.cover||'').replace(/"/g,'&quot;')}" />
+      <textarea id="postContentIn" class="input w-full min-h-[160px]" required>${(p.content||'').replace(/</g,'&lt;')}</textarea>
+      <div class="flex gap-3">
+        <button class="btn btn-primary" type="submit">Update</button>
+        <button type="button" class="btn bg-gray-100" onclick="showManage()">Cancel</button>
+      </div>
+    </form>`;
+}
+
+function saveEditedPost(e){
+  e.preventDefault();
+  const id = document.getElementById('postIdIn').value;
+  const title = document.getElementById('postTitleIn').value.trim();
+  const category = document.getElementById('postCategoryIn').value;
+  const cover = document.getElementById('postCoverIn').value.trim();
+  const content = document.getElementById('postContentIn').value.trim();
+  const posts = getPosts();
+  const idx = posts.findIndex(p=>p.id===id);
+  if(idx === -1) return alert('Not found');
+  posts[idx] = Object.assign({}, posts[idx], {title, category, cover, content, updated: Date.now()});
+  localStorage.setItem(STORAGE.postsKey, JSON.stringify(posts));
+  alert('Updated');
+  renderLatest(); showManage();
+}
+
+function deletePost(id){
+  if(!confirm('Delete this post?')) return;
+  const posts = getPosts().filter(p=>p.id !== id);
+  localStorage.setItem(STORAGE.postsKey, JSON.stringify(posts));
+  renderLatest(); showManage();
+}
+
+/* ============================
+   Initialization
+   ============================ */
+document.getElementById('ftYear').textContent = new Date().getFullYear();
+renderLatest();
+renderCategories();
+showPage('home');
+
+/* Hash routing support (optional): allow /#category/slug or /#post/id */
+window.addEventListener('hashchange', ()=>{
+  const h = location.hash.replace(/^#\/?/, '');
+  if(!h) return showPage('home');
+  const [first, second] = h.split('/');
+  if(first==='category' && second) return showCategory(second);
+  if(first==='post' && second) return showPost(second);
+  if(['home','categories','about','contact'].includes(first)) return showPage(first);
+});
+</script>
 </body>
 </html>
